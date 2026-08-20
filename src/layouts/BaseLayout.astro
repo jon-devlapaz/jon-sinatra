@@ -12,8 +12,19 @@ interface Props {
   image?: string;
 }
 
-const { title, description = 'Jon Sinatra — lounge singer and performer.', image } = Astro.props;
+const {
+  title,
+  description = 'Jon Sinatra — lounge singer and performer.',
+  image = '/og.png',
+} = Astro.props;
 
+// Absolute URLs for canonical/OG so the page is identical on any static host.
+// Astro.site is set at build; the env fallback keeps the same source of truth
+// (PUBLIC_SITE_URL, as in astro.config.mjs) for container/unit rendering.
+const origin =
+  Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://jonsinatra.example');
+const pageUrl = new URL(Astro.url.pathname, origin).href;
+const ogImage = new URL(image, origin).href;
 const navItems = [
   { id: 'marquee', label: 'Home' },
   { id: 'voice', label: 'The Voice' },
@@ -32,9 +43,22 @@ const navItems = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    {image && <meta property="og:image" content={image} />}
     <meta name="theme-color" content="#141414" />
-    <link rel="canonical" href="/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={pageUrl} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Jon Sinatra" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <title>{title}</title>
   </head>
   <body class="m-0 bg-noir text-ivory antialiased">

@@ -55,8 +55,8 @@ export interface Profile {
 
 export const profile: Profile = {
   name: 'Jon Sinatra',
-  tagline: 'Lounge singer &amp; keeper of the great American songbook',
-  marqueeSubtitle: 'Now appearing — lounge &amp; supper club',
+  tagline: 'Lounge singer & keeper of the great American songbook',
+  marqueeSubtitle: 'Now appearing — lounge & supper club',
   bio: 'Jon Sinatra channels the intimacy of the Rat Pack era with a voice cut for cedar-panelled rooms, low lights, and a single spotlight. He performs classic standards, swinging mid-tempo numbers, and late-night ballads — arranged for small combo or small orchestra. Available for supper clubs, private galas, corporate gatherings, and intimate in-house concerts.',
   quote: 'The best sets are the ones where you can hear a pin drop between the notes.',
   portraitAlt: 'Jon Sinatra in a tuxedo, microphone at waist',

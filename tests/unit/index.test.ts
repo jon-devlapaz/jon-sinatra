@@ -91,4 +91,34 @@ describe('index page (single-page profile)', () => {
     expect(html).toContain('id="encore"');
     expect(html).toContain('tel:');
   });
+
+  it('emits I01 head metadata: canonical, OG/Twitter, favicon, description', async () => {
+    const container = await AstroContainer.create();
+    container.addServerRenderer({ renderer: reactRenderer });
+    const html = await container.renderToString(IndexPage);
+
+    // Canonical is absolute and driven by the configured site origin.
+    expect(html).toContain('<link rel="canonical" href="https://jonsinatra.example/">');
+
+    // Open Graph + Twitter cards, with an absolute OG image.
+    expect(html).toContain('<meta property="og:type" content="website">');
+    expect(html).toContain(
+      '<meta property="og:title" content="Jon Sinatra — Lounge Singer &#38; Performer">',
+    );
+    expect(html).toContain(
+      '<meta property="og:image" content="https://jonsinatra.example/og.jpg">',
+    );
+    expect(html).toContain('<meta name="twitter:card" content="summary_large_image">');
+    expect(html).toContain(
+      '<meta name="twitter:image" content="https://jonsinatra.example/og.jpg">',
+    );
+
+    // SEO essentials.
+    expect(html).toContain('<title>Jon Sinatra — Lounge Singer &amp; Performer</title>');
+    expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1">');
+    expect(html).toContain(
+      '<meta name="description" content="Lounge singer &#38; keeper of the great American songbook">',
+    );
+    expect(html).toContain('<link rel="icon" type="image/svg+xml" href="/favicon.svg">');
+  });
 });

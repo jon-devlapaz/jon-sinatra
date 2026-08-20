@@ -1,12 +1,20 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+
+// Canonical site origin. `.example` is RFC 2606 reserved — a deploy-ready
+// placeholder that can never be a real domain; override with PUBLIC_SITE_URL.
+const site = process.env.PUBLIC_SITE_URL || 'https://jonsinatra.example';
 
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  integrations: [react()],
+  site,
+  // Pin the deploy base so subpath hosts never break hashed asset URLs.
+  base: '/',
+  integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },
