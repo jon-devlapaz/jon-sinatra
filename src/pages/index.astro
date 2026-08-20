@@ -16,11 +16,6 @@ import CalendarShell from '../components/sections/CalendarShell.astro';
 import BookingShell from '../components/sections/BookingShell.astro';
 import Footer from '../components/sections/Footer.astro';
 import { profile } from '../data/profile';
-
-// URL-param prefill is honored on SSR; on a pure static host the F08 island
-// (LG3) reads these. The static form is the no-JS degraded surface.
-const packageId = Astro.url.searchParams.get('package') || undefined;
-const date = Astro.url.searchParams.get('date') || undefined;
 ---
 
 <BaseLayout
@@ -34,7 +29,7 @@ const date = Astro.url.searchParams.get('date') || undefined;
   <Packages profile={profile} />
   <Gallery profile={profile} />
   <Testimonials />
-  <CalendarShell />
-  <BookingShell profile={profile} packageId={packageId} date={date} />
+  <CalendarShell bookedDates={profile.blockedDates} />
+  <BookingShell profile={profile} />
   <Footer profile={profile} />
 </BaseLayout>

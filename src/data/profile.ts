@@ -47,6 +47,8 @@ export interface Profile {
   packages: Package[];
   /** Evening gallery placeholders (F05). */
   gallery: GalleryItem[];
+  /** ISO dates already booked — struck through on the F07 calendar (LG3). */
+  blockedDates: string[];
   contact: { email: string; phone: string };
   socials: Social[];
 }
@@ -101,6 +103,14 @@ export const profile: Profile = {
     { alt: 'Trio in a supper club, warm lamplight', label: 'Supper club' },
     { alt: 'Headshot, black and white, tuxedo', label: 'Headshot' },
     { alt: 'Piano and upright bass, late night', label: 'The rhythm section' },
+  ],
+  blockedDates: [
+    '2026-09-12',
+    '2026-09-26',
+    '2026-10-03',
+    '2026-10-17',
+    '2026-11-07',
+    '2026-11-21',
   ],
   contact: { email: 'bookings@example.com', phone: '+1 (212) 555 0199' },
   socials: [

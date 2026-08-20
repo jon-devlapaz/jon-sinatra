@@ -12,7 +12,10 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run build && npm run preview',
+    // Build with a test-only form endpoint so the F08 island's real fetch
+    // path is exercised; the spec intercepts the POST via page.route.
+    command:
+      'PUBLIC_FORM_ENDPOINT=https://example.invalid/booking npm run build && npm run preview',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

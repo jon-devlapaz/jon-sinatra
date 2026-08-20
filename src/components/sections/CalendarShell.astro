@@ -1,34 +1,20 @@
 ---
 /**
- * F07 — The Calendar (static shell).
- * SSR month-view grid (current month) so the page is browsable with no JS.
- * In LG3 the React island hydrates this same markup for interactivity; the
- * static shell is kept as the no-JS degraded surface (progressive enhancement).
+ * F07 — The Calendar (LG3).
+ * SSR-renders the React island month grid (progressive enhancement): no-JS
+ * visitors still see the current month grid, JS users get full navigation and
+ * date selection that prefills the booking form.
  */
-import { format, addMonths, subMonths, startOfMonth, getDay, getDaysInMonth } from 'date-fns';
+import { format } from 'date-fns';
+import CalendarWidget from '../calendar/CalendarWidget';
 
 interface Props {
-  /** ISO date string for the month to render (defaults to today, UTC). */
-  month?: string;
+  /** ISO dates already booked — shown but not selectable. */
+  bookedDates?: string[];
 }
 
-const { month } = Astro.props;
-const now = new Date();
-const target = month ? new Date(month + 'T00:00:00Z') : now;
-const prev = subMonths(startOfMonth(target), 0);
-const cur = startOfMonth(target);
-const next = addMonths(startOfMonth(target), 2);
-const daysInMonth = getDaysInMonth(cur);
-const firstWeekday = getDay(cur); // 0 = Sun
-const label = format(cur, 'LLLL yyyy');
-const weeks: (number | string)[][] = [];
-let week: (number | string)[] = Array(firstWeekday).fill('');
-for (let d = 1; d <= daysInMonth; d++) week.push(d);
-while (week.length) {
-  weeks.push(week.splice(0, 7));
-  if (weeks.length > 5) break;
-}
-if (week.length) weeks.push(week);
+const { bookedDates = [] } = Astro.props;
+const initialIsoMonth = format(new Date(), 'yyyy-MM');
 ---
 
 <section id="calendar" class="border-b hairline-gold-b py-20" aria-labelledby="calendar-title">
@@ -36,49 +22,10 @@ if (week.length) weeks.push(week);
     <p class="eyebrow" id="calendar-eyebrow">The Calendar</p>
     <h2 class="text-display text-ivory" id="calendar-title">Tell me your date</h2>
     <p class="mt-4 max-w-2xl text-ivory-dim">
-      The month grid below is static server-rendered. The live picker (select a date to prefill the
-      booking form) hydrates on top.
+      Striking dates are shown struck-through. Pick any open one — it prefills the booking form
+      below.
     </p>
 
-    <nav
-      class="mt-8 flex items-center justify-between font-mono text-mono uppercase tracking-[0.18em] text-gold"
-    >
-      <a
-        class="btn inline-block px-2 py-1 text-xs"
-        href={`#calendar?month=${format(prev, 'yyyy-MM-dd')}`}>Prev</a
-      >
-      <span aria-hidden="true">{label}</span>
-      <a
-        class="btn inline-block px-2 py-1 text-xs"
-        href={`#calendar?month=${format(next, 'yyyy-MM-dd')}`}>Next</a
-      >
-    </nav>
-
-    <table class="mt-6 w-full border-collapse font-mono text-mono text-gold">
-      <thead>
-        <tr>
-          {
-            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-              <th class="border-b hairline-gold-b py-2">{d}</th>
-            ))
-          }
-        </tr>
-      </thead>
-      <tbody>
-        {
-          weeks.map((row) => (
-            <tr>
-              {row.map((cell) =>
-                cell === '' ? (
-                  <td class="border-b hairline-gold-b py-2" />
-                ) : (
-                  <td class="border-b hairline-gold-b py-2 text-center">{cell}</td>
-                ),
-              )}
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+    <CalendarWidget client:load initialIsoMonth={initialIsoMonth} bookedDates={bookedDates} />
   </div>
 </section>
