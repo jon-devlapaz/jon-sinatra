@@ -1,0 +1,19 @@
+---
+/**
+ * D01 primitive — gatefold card (evidence C4/C6).
+ * A noir raised panel with a hairline gold frame and a subtle centre spine;
+ * slots arbitrary content. Consumed by F04 package tiers and the style guide.
+ */
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className = '' } = Astro.props;
+const cardClass = ['gatefold', className].filter(Boolean).join(' ');
+---
+
+<section class={cardClass}>
+  {title && <h3 class="gatefold__title">{title}</h3>}
+  <slot />
+</section>

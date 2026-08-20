@@ -1,0 +1,373 @@
+/*
+ * D01 — design-system layer (tokens, type, grain, hairlines, ticket-stub,
+ * title-card/gatefold primitives). Evidence-driven per EVIDENCE-aesthetic.md
+ * deltas C1–C7. Consumed by every feature (F01–F09).
+ * Imported via src/styles/global.css.
+ *
+ * C2 fonts are self-hosted via @fontsource (no remote Google Fonts request):
+ * the imports below resolve to local woff2 files that Vite emits into dist,
+ * so the typefaces ship in preview AND production builds. All @import
+ * statements precede every other rule so the CSS optimizer keeps them.
+ */
+@import '@fontsource-variable/bodoni-moda/index.css';
+@import '@fontsource-variable/bodoni-moda/wght-italic.css';
+@import '@fontsource-variable/eb-garamond/index.css';
+@import '@fontsource-variable/eb-garamond/wght-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+@import 'tailwindcss/theme' layer(theme);
+
+@theme {
+  /* C1 — noir / ivory / brass ramp (brass-champagne, not #FFD700 yellow). */
+  --color-noir: #141414; /* warm-tinted base black (halation-safe) */
+  --color-noir-soft: #0c0c0e; /* deep shadow black */
+  --color-noir-lift: #1d1a16; /* raised surfaces (cards, stubs) */
+  --color-ivory: #f2f0eb; /* warm off-white text — never pure white */
+  --color-ivory-dim: #ece7dd; /* secondary text */
+  --color-gold: #c9a84c; /* brass accent — AA on noir */
+  --color-gold-bright: #ffe033; /* glow / stub values on dark */
+  --color-gold-dim: #8a7038; /* hover/dim — UI-only (below 4.5:1 for small text) */
+  --color-gold-deep: #bfa100; /* deep text-safe gold */
+
+  /* C2 — display serif / body serif / mono labels (fontsource family names). */
+  --font-display:
+    'Bodoni Moda Variable', 'Bodoni Moda', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* C2 — type scale (display never below ~24px; body 18–20px / 1.7). */
+  --text-hero: clamp(2.75rem, 9vw + 1rem, 7rem);
+  --text-display: clamp(1.75rem, 4vw + 0.75rem, 3.25rem);
+  --text-title: clamp(1.375rem, 2vw + 0.75rem, 2rem);
+  --text-body: clamp(1.125rem, 0.5vw + 1rem, 1.25rem);
+  --text-mono: 0.8125rem;
+  --leading-body: 1.7;
+
+  /* C1 — warm noir shadows (no cool greys). */
+  --shadow-warm: 0 24px 48px -12px rgb(12 12 14 / 0.55);
+  --shadow-card: inset 0 1px 0 rgb(201 168 76 / 0.1), 0 24px 48px -16px rgb(12 12 14 / 0.6);
+
+  /* C3 — grain governance. */
+  --grain-opacity: 0.16;
+  --grain-step: 0.45s;
+
+  /* C6 — hairline governance (1px min survives low-DPI). */
+  --hairline-width: max(1px, 0.0625rem);
+  --hairline-gold: rgb(201 168 76 / 0.4);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-noir);
+  }
+  body {
+    background-color: var(--color-noir);
+    color: var(--color-ivory);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background-color: var(--color-gold-deep);
+    color: var(--color-noir);
+  }
+  :focus-visible {
+    outline: var(--hairline-width) solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* C3 — film-grain overlay. Place inside a position:relative; isolation:isolate parent. */
+  .film-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity, 0.16);
+    mix-blend-mode: overlay;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22240%22 height=%22240%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');
+    background-size: 240px 240px;
+    animation: film-grain-drift var(--grain-step, 0.45s) steps(4, end) infinite;
+  }
+  .film-grain--static {
+    animation: none;
+  }
+
+  @keyframes film-grain-drift {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-2%, 3%);
+    }
+    50% {
+      transform: translate(3%, -2%);
+    }
+    75% {
+      transform: translate(-3%, -3%);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  /* C3 — optional vignette partner in the grain stack. */
+  .film-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgb(12 12 14 / 0.55) 100%);
+  }
+
+  /* C6 — hairline gold rules (the primary allowed use of gold). */
+  .hairline-gold {
+    border-color: var(--hairline-gold);
+  }
+  .hairline-gold-t {
+    border-top: var(--hairline-width) solid var(--hairline-gold);
+  }
+  .hairline-gold-b {
+    border-bottom: var(--hairline-width) solid var(--hairline-gold);
+  }
+  .hairline-gold-underline {
+    height: var(--hairline-width);
+    background: linear-gradient(
+      90deg,
+      var(--color-gold-deep),
+      var(--color-gold),
+      var(--color-gold-bright),
+      var(--color-gold)
+    );
+  }
+
+  /* C2 — mono eyebrow labels (uppercase + wide tracking). */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  /* C4 — film title-card / marquee primitives (hero treatment). */
+  .title-card {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: clamp(1.5rem, 6vw, 4rem);
+    background:
+      radial-gradient(ellipse at 50% 115%, rgb(201 168 76 / 0.1), transparent 55%),
+      linear-gradient(180deg, var(--color-noir-soft), var(--color-noir));
+  }
+  .title-card--demo {
+    min-height: 60svh;
+  }
+  .marquee {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+    text-align: center;
+  }
+  .marquee-name {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: 0.95;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ivory);
+    text-wrap: balance;
+  }
+  .marquee-sub {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  /* C7 — key-facts strip + media-frame primitives (F02/F05 support). */
+  .facts-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1.25rem;
+  }
+  .facts-strip dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+  .facts-strip dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    color: var(--color-ivory);
+  }
+  .media-frame {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--color-noir-soft);
+    border: var(--hairline-width) solid var(--hairline-gold);
+  }
+
+  /* C6 — gold-outlined action buttons (proven noir CTA pattern). */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ivory);
+    background: transparent;
+    border: var(--hairline-width) solid var(--color-gold);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+  .btn:hover {
+    background-color: rgb(201 168 76 / 0.12);
+  }
+
+  /* C4/C6 — gatefold card primitive. */
+  .gatefold {
+    position: relative;
+    isolation: isolate;
+    padding: 1.75rem;
+    background: linear-gradient(165deg, var(--color-noir-lift), var(--color-noir));
+    border: var(--hairline-width) solid var(--hairline-gold);
+    border-radius: 0.375rem;
+    box-shadow: var(--shadow-card);
+  }
+  .gatefold__title {
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    color: var(--color-ivory);
+  }
+
+  /* C5 — ticket-stub CTA (notch masks 51% overlap, dashed tear, 6-stop barcode). */
+  .ticket-stub {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: stretch;
+    width: min(100%, 36rem);
+    background: linear-gradient(180deg, var(--color-noir-lift), var(--color-noir-soft));
+    border: var(--hairline-width) solid var(--hairline-gold);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-card);
+    -webkit-mask:
+      radial-gradient(10px at left 71%, transparent 97%, #000) left / 51% 100% no-repeat,
+      radial-gradient(10px at right 71%, transparent 97%, #000) right / 51% 100% no-repeat;
+    mask:
+      radial-gradient(10px at left 71%, transparent 97%, #000) left / 51% 100% no-repeat,
+      radial-gradient(10px at right 71%, transparent 97%, #000) right / 51% 100% no-repeat;
+  }
+  .ticket-stub__main {
+    flex: 1 1 auto;
+    display: grid;
+    gap: 0.875rem;
+    align-content: center;
+    padding: 1.5rem 1.75rem;
+  }
+  .ticket-stub__title {
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    line-height: 1.1;
+    color: var(--color-ivory);
+  }
+  .ticket-stub__status {
+    display: inline-block;
+    justify-self: start;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    border: var(--hairline-width) solid rgb(201 168 76 / 0.4);
+    border-radius: 999px;
+  }
+  .ticket-stub__tear {
+    flex: 0 0 auto;
+    width: 2px;
+    margin: 1.25rem 0;
+    border-left: 2px dashed rgb(242 240 235 / 0.35);
+  }
+  .ticket-stub__stub {
+    flex: 0 0 auto;
+    width: clamp(7rem, 28%, 10rem);
+    display: grid;
+    gap: 0.75rem;
+    align-content: center;
+    justify-items: end;
+    padding: 1.5rem 1.75rem 1.5rem 1.25rem;
+    border-left: var(--hairline-width) solid rgb(201 168 76 / 0.3);
+  }
+  .ticket-stub__barcode {
+    width: 100%;
+    height: 2.5rem;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--color-ivory) 0 2px,
+      transparent 2px 3px,
+      var(--color-ivory) 3px 4px,
+      transparent 4px 7px,
+      var(--color-ivory) 7px 8px,
+      transparent 8px 10px
+    );
+  }
+  .ticket-stub__value {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gold-bright);
+  }
+  .ticket-stub__cta {
+    justify-self: start;
+  }
+
+  @media (max-width: 26.25rem) {
+    .ticket-stub {
+      flex-direction: column;
+    }
+    .ticket-stub__tear {
+      width: auto;
+      height: 2px;
+      margin: 0 1.75rem;
+      border-left: none;
+      border-top: 2px dashed rgb(242 240 235 / 0.35);
+    }
+    .ticket-stub__stub {
+      width: auto;
+      justify-items: start;
+      padding-top: 1.25rem;
+      border-left: none;
+      border-top: var(--hairline-width) solid rgb(201 168 76 / 0.3);
+    }
+  }
+}
+
+/* C3 — reduced motion: freeze grain drift (keep texture), kill transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .film-grain,
+  .film-grain--static {
+    animation: none;
+  }
+  .btn {
+    transition: none;
+  }
+}

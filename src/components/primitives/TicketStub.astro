@@ -1,0 +1,45 @@
+---
+/**
+ * D01 primitive — ticket-stub CTA (evidence C5).
+ * Real <a> under the costume; punched-notch mask, 2px dashed tear line,
+ * six-stop barcode strip, mono stub value. Status renders as real visible
+ * text. Stacks vertically below ~420px.
+ */
+interface Props {
+  href: string;
+  /** CTA label, e.g. "Book the show". */
+  label: string;
+  /** Mono eyebrow, e.g. package name "Cocktail Hour". */
+  eyebrow?: string;
+  /** Headline, e.g. "Two-hour lounge set". */
+  title: string;
+  /** Mono stub value, e.g. "$1,200" or a promo code. */
+  stubValue: string;
+  /** Optional real-text status chip, e.g. "On request" or "Sold out". */
+  status?: string;
+}
+
+const { href, label, eyebrow, title, stubValue, status } = Astro.props;
+---
+
+<article class="ticket-stub">
+  <div class="ticket-stub__main">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h3 class="ticket-stub__title">{title}</h3>
+    {
+      status && (
+        <p class="ticket-stub__status" role="status">
+          {status}
+        </p>
+      )
+    }
+    <a class="btn ticket-stub__cta" href={href} aria-label={`${label}: ${title}`}>
+      <span>{label}</span>
+    </a>
+  </div>
+  <div class="ticket-stub__tear" aria-hidden="true"></div>
+  <div class="ticket-stub__stub">
+    <div class="ticket-stub__barcode" aria-hidden="true"></div>
+    <p class="ticket-stub__value">{stubValue}</p>
+  </div>
+</article>

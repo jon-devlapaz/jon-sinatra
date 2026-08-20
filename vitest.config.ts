@@ -1,14 +1,14 @@
-import { defineConfig } from 'vitest/config';
+import { getViteConfig } from 'astro/config';
 
-export default defineConfig({
+export default getViteConfig({
   test: {
     globalSetup: ['./tests/global-setup.ts'],
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/unit/**/*.test.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'html'],
       all: true,
-      include: ['src/**/*.{ts,tsx}'],
+      include: ['src/**/*.{ts,tsx,astro}'],
       exclude: [
         'src/**/*.test.ts',
         // Framework wiring bound to the astro:content virtual module;

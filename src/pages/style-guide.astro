@@ -1,0 +1,225 @@
+---
+/**
+ * D01 — visible style guide (/style-guide).
+ * Shows every design token, the type scale, and every primitive component.
+ * Contrast figures below are measured WCAG 2.x ratios (real math, not claims).
+ */
+import '../styles/global.css';
+import FilmGrain from '../components/primitives/FilmGrain.astro';
+import GatefoldCard from '../components/primitives/GatefoldCard.astro';
+import TicketStub from '../components/primitives/TicketStub.astro';
+
+const siteName = 'Jon Sinatra';
+const colors = [
+  { name: 'noir', value: '#141414', role: 'Base background — warm-tinted black' },
+  { name: 'noir-soft', value: '#0C0C0E', role: 'Deep shadow / letterbox black' },
+  { name: 'noir-lift', value: '#1D1A16', role: 'Raised surfaces (cards, stubs)' },
+  { name: 'ivory', value: '#F2F0EB', role: 'Primary text (never pure white)' },
+  { name: 'ivory-dim', value: '#ECE7DD', role: 'Secondary text' },
+  { name: 'gold', value: '#C9A84C', role: 'Brass accent — hairline rules, labels' },
+  { name: 'gold-bright', value: '#FFE033', role: 'Glow text / stub values on dark' },
+  { name: 'gold-dim', value: '#8A7038', role: 'Hover / UI-only (3.91:1 — not small text)' },
+  { name: 'gold-deep', value: '#BFA100', role: 'Deep text-safe gold' },
+];
+const contrastPairs = [
+  { pair: 'ivory / noir', ratio: '16.18:1', usage: 'body text (AAA)' },
+  { pair: 'ivory-dim / noir', ratio: '14.95:1', usage: 'secondary text (AAA)' },
+  { pair: 'gold / noir', ratio: '8.06:1', usage: 'accent text, labels (AAA)' },
+  { pair: 'gold-bright / noir', ratio: '14.00:1', usage: 'stub values (AAA)' },
+  { pair: 'gold-deep / noir', ratio: '7.29:1', usage: 'deep gold text (AAA)' },
+  { pair: 'gold-dim / noir', ratio: '3.91:1', usage: 'UI-only — never small text' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content={`${siteName} — D01 design system style guide: tokens, typography, grain, ticket-stub CTA.`}
+    />
+    <title>Style Guide — {siteName}</title>
+  </head>
+  <body>
+    <a class="btn" href="/" style="position: absolute; top: 1rem; left: 1rem">← Back to site</a>
+
+    <main class="mx-auto w-full max-w-5xl px-6 py-20">
+      <header>
+        <p class="eyebrow">D01 / Design System</p>
+        <h1 class="mt-4 text-display text-ivory">The Style Guide</h1>
+        <div class="hairline-gold-underline mt-6 w-40"></div>
+      </header>
+
+      <!-- C4 — hero treatment: film title-card demo -->
+      <section class="mt-16" aria-labelledby="hero-title">
+        <p class="eyebrow" id="hero-title">Hero treatment — film title-card</p>
+        <div class="title-card title-card--demo mt-4">
+          <FilmGrain />
+          <div class="film-vignette" aria-hidden="true"></div>
+          <div class="marquee">
+            <p class="marquee-sub">Now appearing — lounge &amp; supper club</p>
+            <h2 class="marquee-name">{siteName}</h2>
+            <div class="hairline-gold-underline w-48"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- C1 — tokens -->
+      <section class="mt-20" aria-labelledby="tokens-title">
+        <p class="eyebrow" id="tokens-title">C1 / Color tokens — noir · ivory · brass</p>
+        <h2 class="mt-3 text-display text-ivory">Tokens</h2>
+        <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            colors.map((c) => (
+              <li class="gatefold" style="padding: 1.25rem">
+                <div
+                  class="h-16 w-16 rounded-sm border hairline-gold"
+                  style={`background-color: ${c.value}`}
+                />
+                <p class="mt-4 font-mono text-mono text-ivory">--color-{c.name}</p>
+                <p class="mt-1 font-mono text-mono text-gold-bright">{c.value}</p>
+                <p class="mt-2 text-ivory-dim">{c.role}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h3 class="mt-10 text-title text-ivory">Measured contrast (WCAG 2.x)</h3>
+        <table class="mt-4 w-full border-collapse font-mono text-mono">
+          <thead>
+            <tr class="text-gold">
+              <th class="border-b hairline-gold py-2 pr-4 text-left">Pair</th>
+              <th class="border-b hairline-gold py-2 pr-4 text-left">Ratio</th>
+              <th class="border-b hairline-gold py-2 text-left">Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              contrastPairs.map((row) => (
+                <tr>
+                  <td class="border-b hairline-gold py-2 pr-4 text-ivory">{row.pair}</td>
+                  <td class="border-b hairline-gold py-2 pr-4 text-gold-bright">{row.ratio}</td>
+                  <td class="border-b hairline-gold py-2 text-ivory-dim">{row.usage}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <!-- C2 — typography -->
+      <section class="mt-20" aria-labelledby="type-title">
+        <p class="eyebrow" id="type-title">
+          C2 / Typography — Bodoni Moda · EB Garamond · IBM Plex Mono
+        </p>
+        <h2 class="mt-3 text-display text-ivory">Type scale</h2>
+        <div class="mt-8 grid gap-6">
+          <p class="text-display text-ivory">Display — for the marquee, section titles</p>
+          <p class="text-title text-ivory">Title — section heads, stub headlines</p>
+          <p class="text-body text-ivory">
+            Body — EB Garamond at 18–20px / 1.7. Small x-height, so it stays readable at body sizes
+            across the lounge line-up.
+          </p>
+          <p class="font-mono text-mono tracking-[0.24em] uppercase text-gold">
+            Mono labels — eyebrows, facts, prices, ticket numbers
+          </p>
+        </div>
+      </section>
+
+      <!-- C3 — grain -->
+      <section class="mt-20" aria-labelledby="grain-title">
+        <p class="eyebrow" id="grain-title">C3 / Film grain — composable overlay</p>
+        <h2 class="mt-3 text-display text-ivory">Grain &amp; vignette</h2>
+        <p class="mt-4 max-w-prose text-ivory-dim">
+          The grain overlay is an empty, <code>aria-hidden</code>, pointer-events-none layer
+          (feTurbulence noise, <code>mix-blend-mode: overlay</code>, opacity 0.16, steps(4,end)
+          drift every 0.45s). It freezes — but stays visible — under
+          <code>prefers-reduced-motion</code>. Place it inside a
+          <code>position: relative; isolation: isolate</code> container.
+        </p>
+        <div
+          class="relative isolate mt-6 grid place-items-center bg-noir-soft py-20"
+          style="border: var(--hairline-width) solid var(--hairline-gold)"
+        >
+          <FilmGrain />
+          <div class="film-vignette" aria-hidden="true"></div>
+          <p class="relative z-10 max-w-sm px-8 text-center text-ivory">
+            A smoky room, a single mic stand, and that low gold glow.
+          </p>
+        </div>
+      </section>
+
+      <!-- C5 — ticket-stub CTA -->
+      <section class="mt-20" aria-labelledby="stub-title">
+        <p class="eyebrow" id="stub-title">C5 / Ticket-stub CTA</p>
+        <h2 class="mt-3 text-display text-ivory">The Stub</h2>
+        <TicketStub
+          href="#booking"
+          label="Book the show"
+          eyebrow="Cocktail Hour"
+          title="Two-hour lounge set"
+          stubValue="$1,200"
+          status="On request"
+        />
+        <p class="mt-6 max-w-prose text-ivory-dim">
+          Punched-notch mask (two half-masks overlapping at 51% — no seam), 2px dashed tear line,
+          six-stop barcode strip, mono stub value, and a real labelled anchor under the costume.
+          Below ~420px the stub stacks under the main panel.
+        </p>
+      </section>
+
+      <!-- C4/C6 — gatefold + hairlines + buttons -->
+      <section class="mt-20" aria-labelledby="primitives-title">
+        <p class="eyebrow" id="primitives-title">C4 · C6 / Gatefold, hairlines, buttons</p>
+        <h2 class="mt-3 text-display text-ivory">Layout primitives</h2>
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          <GatefoldCard title="Gatefold panel">
+            <p class="mt-3 text-ivory-dim">
+              Raised noir panel with hairline gold frame and a centre spine — the package-tier card
+              from F04.
+            </p>
+          </GatefoldCard>
+          <div class="gatefold" style="padding: 1.75rem">
+            <h3 class="gatefold__title">Hairline rules</h3>
+            <div class="hairline-gold-t mt-4"></div>
+            <p class="mt-4 text-ivory-dim">1px min-width rules — gold is for trim, never a fill.</p>
+            <a class="btn mt-6" href="#booking">Gold-outline CTA</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- C7 — supporting primitives -->
+      <section class="mt-20" aria-labelledby="support-title">
+        <p class="eyebrow" id="support-title">C7 / Supporting primitives</p>
+        <h2 class="mt-3 text-display text-ivory">Facts strip &amp; media frame</h2>
+        <dl class="facts-strip mt-8">
+          <div>
+            <dt>Range</dt>
+            <dd>Two octaves</dd>
+          </div>
+          <div>
+            <dt>Venue</dt>
+            <dd>Supper clubs</dd>
+          </div>
+          <div>
+            <dt>Bookings</dt>
+            <dd>Open</dd>
+          </div>
+        </dl>
+        <div class="media-frame mt-8">
+          <p class="absolute inset-0 grid place-items-center px-8 text-center text-ivory-dim">
+            Noir media frame — F05 imagery slots here.
+          </p>
+        </div>
+      </section>
+
+      <footer class="mt-20 border-t hairline-gold-b pt-6 text-ivory-dim">
+        <p class="font-mono text-mono uppercase tracking-[0.2em]">
+          D01 design system — reduced-motion: grain freezes, transitions disabled
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

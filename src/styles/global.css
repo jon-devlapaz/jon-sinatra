@@ -4,3 +4,4 @@
  * ticket-stub primitives) and extends this file there.
  */
 @import 'tailwindcss';
+@import './theme.css';
