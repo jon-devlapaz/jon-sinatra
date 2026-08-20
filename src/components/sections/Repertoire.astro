@@ -1,0 +1,53 @@
+---
+/**
+ * F03 — The Repertoire (tracklist).
+ * Data-driven from the Astro Content Collection. Groups by era; mono indexing
+ * frames it as a running order (no extra JS).
+ */
+import { getCollection } from 'astro:content';
+
+const repertoire = await getCollection('repertoire');
+
+type Entry = (typeof repertoire)[number];
+const byEra = (entries: Entry[]) =>
+  entries.reduce<Record<string, Entry[]>>((acc, e) => {
+    (acc[e.data.era] = acc[e.data.era] || []).push(e);
+    return acc;
+  }, {});
+
+const eras = byEra(repertoire);
+---
+
+<section id="repertoire" class="border-b hairline-gold-b py-20" aria-labelledby="repertoire-title">
+  <div class="mx-auto max-w-4xl">
+    <p class="eyebrow" id="repertoire-eyebrow">The Repertoire</p>
+    <h2 class="text-display text-ivory" id="repertoire-title">Songs in the set list</h2>
+    <p class="mt-4 max-w-2xl text-ivory-dim">
+      A running order of standards, swinging numbers, and late-night ballads.
+    </p>
+
+    {
+      Object.entries(eras).map(([era, songs]) => (
+        <section class="mt-12" aria-label={era}>
+          <h3 class="font-mono text-mono uppercase tracking-[0.2em] text-gold">{era}</h3>
+          <ul class="mt-4 list-none divide-y divide-gold/20">
+            {songs.map((s, i) => (
+              <li class="grid grid-cols-[2rem_1fr] py-3 last:border-0">
+                <span class="font-mono text-mono text-gold-bright">{i + 1}</span>
+                <div>
+                  <span class="font-display text-title text-ivory">{s.data.title}</span>
+                  {s.data.duration && (
+                    <span class="font-mono text-mono text-ivory-dim"> · {s.data.duration}</span>
+                  )}
+                  {s.data.notes && (
+                    <p class="mt-1 max-w-lg text-sm text-ivory-dim">{s.data.notes}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</section>

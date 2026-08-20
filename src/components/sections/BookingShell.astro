@@ -1,0 +1,128 @@
+---
+/**
+ * F08 — The Booking (static shell).
+ * SSR-rendered, no-JS `<form>` that posts to a static-host-compatible endpoint
+ * (env-configurable FORM_ENDPOINT). Fields prefilled by URL params (from F04
+ * `?package=` and F07 `?date=`) so a JS-less visitor can still submit.
+ *
+ * In LG3 a React island hydrates this markup for inline validation + success/error
+ * states; the static form is the degraded, always-working surface.
+ */
+import type { Profile } from '../../data/profile';
+
+interface Props {
+  profile: Profile;
+  /** Prefill values coming from F04 package links / F07 date picker. */
+  packageId?: string;
+  date?: string;
+}
+
+const { profile, packageId, date } = Astro.props;
+// Static-shell fallback: a mailto: POST opens the visitor's mail composer with
+// the form data pre-filled — zero third-party dependency and never fabricated.
+// The LG3 island swaps in a configured FORM_ENDPOINT when one is provided.
+const endpoint = `mailto:${profile.contact.email}`;
+
+// Resolve the package label for the static prefilled field.
+const pkgLabel = packageId
+  ? profile.packages.find((p) => p.id === packageId)?.eyebrow || packageId
+  : '';
+---
+
+<section
+  id="booking"
+  class="border-b hairline-gold-b py-20"
+  aria-labelledby="booking-title"
+  data-react="booking-form"
+>
+  <div class="mx-auto max-w-2xl">
+    <p class="eyebrow" id="booking-eyebrow">The Booking</p>
+    <h2 class="text-display text-ivory" id="booking-title">Set the date</h2>
+    <p class="mt-4 max-w-2xl text-ivory-dim">
+      A note, a date, a package — I'll get back within 24 hours. (No spam; ever.)
+    </p>
+
+    <form action={endpoint} method="POST" class="mt-10 grid gap-5" data-testid="booking-form">
+      <!-- Honeypot trap (hidden from humans) -->
+      <div class="hidden">
+        <label>
+          Leave this empty: <input name="_gotcha" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+      {
+        pkgLabel && (
+          <input type="hidden" name="package" value={packageId} data-testid="prefill-package" />
+        )
+      }
+      {date && <input type="hidden" name="date" value={date} />}
+      <input type="hidden" name="subject" value={`Booking inquiry — ${pkgLabel || 'Your date'}`} />
+
+      <div class="grid gap-1">
+        <label class="font-mono text-mono uppercase tracking-[0.12em] text-gold" for="name"
+          >Name</label
+        >
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          value=""
+          class="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+        />
+      </div>
+      <div class="grid gap-1">
+        <label class="font-mono text-mono uppercase tracking-[0.12em] text-gold" for="email"
+          >Email</label
+        >
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          value=""
+          class="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+        />
+      </div>
+      <div class="grid gap-1">
+        <label class="font-mono text-mono uppercase tracking-[0.12em] text-gold" for="date"
+          >Event date</label
+        >
+        <input
+          id="date"
+          name="date"
+          type="date"
+          value={date || ''}
+          class="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+        />
+      </div>
+      <div class="grid gap-1">
+        <label class="font-mono text-mono uppercase tracking-[0.12em] text-gold" for="package"
+          >Package</label
+        >
+        <input
+          id="package"
+          name="package"
+          type="text"
+          readonly
+          value={pkgLabel}
+          class="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory-dim outline-none"
+        />
+      </div>
+      <div class="grid gap-1">
+        <label class="font-mono text-mono uppercase tracking-[0.12em] text-gold" for="message"
+          >Message</label
+        >
+        <textarea
+          id="message"
+          name="message"
+          rows={4}
+          placeholder="What's the occasion? Venue size? A song you'd love to hear?"
+          class="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+        ></textarea>
+      </div>
+      <div class="pt-2">
+        <button type="submit" class="btn w-full justify-center"> Send the booking </button>
+      </div>
+    </form>
+  </div>
+</section>

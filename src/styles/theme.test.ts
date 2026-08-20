@@ -19,14 +19,14 @@ function contrast(a: string, b: string): number {
   return (l1 + 0.05) / (l2 + 0.05);
 }
 
-/** Extract `--name: value;` pairs from the @theme block of theme.css. */
+/** Extract `--name: value;` pairs from the @theme block of theme.css.
+ * Values may wrap across lines (prettier), so parse the whole block at once. */
 function parseThemeTokens(source: string): Map<string, string> {
   const tokens = new Map<string, string>();
   const block = source.match(/@theme\s*{([\s\S]*?)}/);
   expect(block, 'theme.css must contain an @theme token block').not.toBeNull();
-  for (const line of block![1].split('\n')) {
-    const match = line.match(/^\s*(--[\w-]+):\s*([^;]+);/);
-    if (match) tokens.set(match[1], match[2].trim());
+  for (const m of block![1].matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    tokens.set(m[1], m[2].trim());
   }
   return tokens;
 }

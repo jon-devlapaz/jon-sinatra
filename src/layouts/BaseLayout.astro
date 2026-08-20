@@ -1,0 +1,76 @@
+---
+/**
+ * LG1 layout — shared gatefold frame.
+ * Noir page shell: film-grain + vignette over a dark raised surface.
+ * Consumed by every page (index, style-guide, …).
+ */
+import FilmGrain from '../components/primitives/FilmGrain.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description = 'Jon Sinatra — lounge singer and performer.', image } = Astro.props;
+
+const navItems = [
+  { id: 'marquee', label: 'Home' },
+  { id: 'voice', label: 'The Voice' },
+  { id: 'repertoire', label: 'The Repertoire' },
+  { id: 'show', label: 'The Show' },
+  { id: 'stage', label: 'The Stage' },
+  { id: 'word', label: 'The Word' },
+  { id: 'calendar', label: 'The Calendar' },
+  { id: 'booking', label: 'The Booking' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="theme-color" content="#141414" />
+    <link rel="canonical" href="/" />
+    <title>{title}</title>
+  </head>
+  <body class="m-0 bg-noir text-ivory antialiased">
+    <a
+      href="#main"
+      class="fixed top-4 left-4 z-50 -translate-y-20 rounded-md bg-noir-lift px-4 py-2 font-mono text-mono uppercase tracking-[0.18em] text-gold opacity-0 focus:translate-y-0 focus:opacity-100"
+      >Skip to content</a
+    >
+    <div class="relative isolate min-h-svh bg-noir">
+      <FilmGrain />
+      <div class="film-vignette" aria-hidden="true"></div>
+
+      <header class="relative z-10 border-b hairline-gold-b bg-noir-soft px-6 py-4">
+        <nav aria-label="Site">
+          <ul
+            class="mx-auto flex max-w-5xl flex-wrap gap-x-4 gap-y-2 font-mono text-mono uppercase tracking-[0.18em] text-gold"
+          >
+            {
+              navItems.map((item) => (
+                <li>
+                  <a
+                    class="btn inline-block scale-90 bg-transparent px-2 py-1 text-xs shadow-none hover:scale-100"
+                    href={`#${item.id}`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </header>
+
+      <main id="main" tabindex="-1" class="relative z-10 mx-auto max-w-5xl px-6">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

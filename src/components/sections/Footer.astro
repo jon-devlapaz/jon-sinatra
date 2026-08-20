@@ -1,0 +1,90 @@
+---
+/**
+ * F09 — The Encore (footer).
+ * Contact recap, quick-nav to each section, socials, a final booking nudge CTA,
+ * and a credit line. No CTA confusion with the F08 booking form — this is a
+ * scroll-to-contact prompt.
+ */
+import type { Profile } from '../../data/profile';
+import { getYear } from 'date-fns';
+
+interface Props {
+  profile: Profile;
+}
+const { profile } = Astro.props;
+
+const scrollNav = [
+  { id: 'marquee', label: 'Home' },
+  { id: 'voice', label: 'The Voice' },
+  { id: 'repertoire', label: 'Repertoire' },
+  { id: 'show', label: 'The Show' },
+  { id: 'stage', label: 'The Stage' },
+  { id: 'word', label: 'The Word' },
+  { id: 'calendar', label: 'The Calendar' },
+  { id: 'booking', label: 'The Booking' },
+];
+---
+
+<section id="encore" class="py-12">
+  <footer class="border-t hairline-gold-t pt-8">
+    <div class="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
+      <!-- Contact recap -->
+      <div>
+        <p class="font-mono text-mono uppercase tracking-[0.2em] text-gold">Say hello</p>
+        <p class="mt-3">
+          <a class="text-ivory" href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+        </p>
+        <p class="mt-1">
+          <a class="text-ivory" href={`tel:${profile.contact.phone.replace(/\s+/g, '')}`}
+            >{profile.contact.phone}</a
+          >
+        </p>
+      </div>
+
+      <!-- Quick nav -->
+      <nav aria-label="Footer">
+        <p class="font-mono text-mono uppercase tracking-[0.2em] text-gold">Set list</p>
+        <ul class="mt-3 grid gap-2 font-mono text-mono text-gold">
+          {
+            scrollNav.map((s) => (
+              <li>
+                <a
+                  class="btn inline-block px-1 py-0.5 text-xs text-gold-bright hover:text-ivory"
+                  href={`#${s.id}`}
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Booking nudge + socials -->
+      <div class="flex flex-col items-start gap-4">
+        <a class="btn" href="#booking?package=standard">Book the night</a>
+        <div class="flex gap-2 font-mono text-mono text-gold">
+          {
+            profile.socials.map((s) => (
+              <a
+                class="text-gold-bright hover:text-ivory"
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {s.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="mt-10 border-t hairline-gold-t pt-6 text-center text-ivory-dim font-mono text-mono uppercase tracking-[0.18em]"
+    >
+      © {getYear(new Date())}
+      {profile.name} · Est. {getYear(new Date())}
+    </div>
+  </footer>
+</section>

@@ -1,0 +1,55 @@
+---
+/**
+ * F02 — The Voice.
+ * Bio: portrait (media-frame placeholder until a real asset lands), key facts
+ * strip, and an "in his own words" pull quote.
+ */
+import type { Fact, Profile } from '../../data/profile';
+
+interface Props {
+  profile: Profile;
+}
+const { profile } = Astro.props;
+
+function initials(str: string): string {
+  return str
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase();
+}
+---
+
+<section id="voice" class="border-b hairline-gold-b py-20" aria-labelledby="voice-title">
+  <div class="grid gap-12 md:grid-cols-[16rem_1fr] items-start">
+    <!-- C3 — portrait frame (no asset: themed placeholder) -->
+    <div class="media-frame">
+      <div class="absolute inset-0 grid place-items-center">
+        <span class="font-display text-5xl text-ivory-dim">{initials(profile.name)}</span>
+      </div>
+    </div>
+
+    <div>
+      <p class="eyebrow" id="voice-eyebrow">The Voice</p>
+      <h2 class="text-display text-ivory" id="voice-title">{profile.name}</h2>
+      <div class="hairline-gold-underline my-6 w-24"></div>
+
+      <p class="text-ivory">{profile.bio}</p>
+
+      <blockquote class="my-10 border-l hairline-gold-l pl-6 italic text-ivory-dim">
+        "{profile.quote}"
+      </blockquote>
+
+      <dl class="facts-strip">
+        {
+          profile.facts.map((f: Fact) => (
+            <>
+              <dt>{f.dt}</dt>
+              <dd>{f.dd}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

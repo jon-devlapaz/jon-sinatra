@@ -1,0 +1,46 @@
+---
+/**
+ * F04 — The Show (package tiers).
+ * Gatefold cards, each with a ticket-stub CTA that prefills the booking form
+ * via `?package=<id>` (wired to the F08 island in LG3).
+ */
+import GatefoldCard from '../../components/primitives/GatefoldCard.astro';
+import TicketStub from '../../components/primitives/TicketStub.astro';
+import type { Package, Profile } from '../../data/profile';
+
+interface Props {
+  profile: Profile;
+}
+const { profile } = Astro.props;
+---
+
+<section id="show" class="border-b hairline-gold-b py-20" aria-labelledby="show-title">
+  <div class="mx-auto max-w-5xl">
+    <p class="eyebrow" id="show-eyebrow">The Show</p>
+    <h2 class="text-display text-ivory" id="show-title">Three ways to book the night</h2>
+    <p class="mt-4 max-w-2xl text-ivory-dim">
+      From a cocktail-hour overture to a full orchestra gala. Your date picks the key.
+    </p>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-3">
+      {
+        (profile.packages as Package[]).map((p) => (
+          <GatefoldCard title={p.title}>
+            <p class="eyebrow mt-1" aria-label={p.eyebrow}>
+              {p.eyebrow}
+            </p>
+            <p class="mt-3 text-ivory">{p.blurb}</p>
+            <TicketStub
+              href={p.ctaHref}
+              label="Book this set"
+              eyebrow={p.eyebrow}
+              title={p.title}
+              stubValue={p.stubValue}
+              status={p.status}
+            />
+          </GatefoldCard>
+        ))
+      }
+    </div>
+  </div>
+</section>
