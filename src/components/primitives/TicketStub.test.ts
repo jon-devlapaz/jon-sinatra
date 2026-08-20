@@ -27,11 +27,11 @@ describe('TicketStub CTA primitive (C5)', () => {
     expect(html).toContain('Two-hour lounge set');
     expect(html).toContain('class="ticket-stub__status" role="status"');
     expect(html).toContain('On request');
-    // C5: mono stub value + decorative barcode hidden from assistive tech.
+    // C5: mono value renders; the barcode/tear were removed in the declutter pass.
     expect(html).toContain('class="ticket-stub__value"');
     expect(html).toContain('$1,200');
-    expect(html).toContain('class="ticket-stub__barcode" aria-hidden="true"');
-    expect(html).toContain('class="ticket-stub__tear" aria-hidden="true"');
+    expect(html).not.toContain('ticket-stub__barcode');
+    expect(html).not.toContain('ticket-stub__tear');
   });
 
   it('omits eyebrow and status when not provided', async () => {

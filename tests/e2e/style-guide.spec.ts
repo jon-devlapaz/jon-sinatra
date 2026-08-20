@@ -71,7 +71,7 @@ test.describe('D01 style guide', () => {
     expect(result.renderedGold).toBe('rgb(201, 168, 76)');
   });
 
-  test('type scale stays within the viewport at 360px–1440px and the stub stacks on small screens', async ({
+  test('type scale stays within the viewport at 360px–1440px and the minimal CTA card renders', async ({
     page,
   }) => {
     for (const width of [360, 768, 1440]) {
@@ -83,14 +83,15 @@ test.describe('D01 style guide', () => {
       expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
     }
 
-    // C5 — below ~420px the ticket stub wraps: stub panel stacks under the main panel.
+    // C5 — the decluttered card is one quiet column: headline, status/value, labelled CTA.
     await page.setViewportSize({ width: 360, height: 900 });
     await page.goto('/style-guide');
     const stub = page.locator('.ticket-stub').first();
-    const main = await stub.locator('.ticket-stub__main').boundingBox();
-    const stubPanel = await stub.locator('.ticket-stub__stub').boundingBox();
-    expect(main).not.toBeNull();
-    expect(stubPanel).not.toBeNull();
-    expect(stubPanel!.y).toBeGreaterThan(main!.y + main!.height / 2);
+    await expect(stub.locator('.ticket-stub__title')).toContainText('Two-hour lounge set');
+    await expect(stub.locator('.ticket-stub__status')).toContainText('On request');
+    await expect(stub.locator('.ticket-stub__value')).toContainText('Enquire');
+    await expect(stub.getByRole('link', { name: /book the/i })).toHaveAttribute('href', '#booking');
+    await expect(stub.locator('.ticket-stub__barcode')).toHaveCount(0);
+    await expect(stub.locator('.ticket-stub__tear')).toHaveCount(0);
   });
 });

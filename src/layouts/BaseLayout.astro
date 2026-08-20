@@ -1,10 +1,11 @@
 ---
 /**
  * LG1 layout — shared gatefold frame.
- * Noir page shell: film-grain + vignette over a dark raised surface.
+ * Noir page shell. Film-grain + vignette were removed in the declutter pass
+ * (they remain documented on the style-guide page); the shell is now a quiet
+ * noir surface.
  * Consumed by every page (index, style-guide, …).
  */
-import FilmGrain from '../components/primitives/FilmGrain.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -69,21 +70,15 @@ const navItems = [
       >Skip to content</a
     >
     <div class="relative isolate min-h-svh bg-noir">
-      <FilmGrain />
-      <div class="film-vignette" aria-hidden="true"></div>
-
-      <header class="relative z-10 border-b hairline-gold-b bg-noir-soft px-6 py-4">
+      <header class="relative z-10 bg-noir-soft px-6 py-4">
         <nav aria-label="Site">
           <ul
-            class="mx-auto flex max-w-5xl flex-wrap gap-x-4 gap-y-2 font-mono text-mono uppercase tracking-[0.18em] text-gold"
+            class="mx-auto flex max-w-5xl flex-wrap gap-x-6 gap-y-2 font-mono text-mono uppercase tracking-[0.18em] text-gold"
           >
             {
               navItems.map((item) => (
                 <li>
-                  <a
-                    class="btn inline-block scale-90 bg-transparent px-2 py-1 text-xs shadow-none hover:scale-100"
-                    href={`#${item.id}`}
-                  >
+                  <a class="transition-colors duration-150 hover:text-ivory" href={`#${item.id}`}>
                     {item.label}
                   </a>
                 </li>

@@ -25,8 +25,8 @@ const scrollNav = [
 ];
 ---
 
-<section id="encore" class="py-12">
-  <footer class="border-t hairline-gold-t pt-8">
+<section id="encore" class="py-16">
+  <footer>
     <div class="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
       <!-- Contact recap -->
       <div>
@@ -48,10 +48,7 @@ const scrollNav = [
           {
             scrollNav.map((s) => (
               <li>
-                <a
-                  class="btn inline-block px-1 py-0.5 text-xs text-gold-bright hover:text-ivory"
-                  href={`#${s.id}`}
-                >
+                <a class="transition-colors duration-150 hover:text-ivory" href={`#${s.id}`}>
                   {s.label}
                 </a>
               </li>
@@ -81,7 +78,7 @@ const scrollNav = [
     </div>
 
     <div
-      class="mt-10 border-t hairline-gold-t pt-6 text-center text-ivory-dim font-mono text-mono uppercase tracking-[0.18em]"
+      class="mt-12 pt-6 text-center text-ivory-dim font-mono text-mono uppercase tracking-[0.18em]"
     >
       © {getYear(new Date())}
       {profile.name} · Est. {getYear(new Date())}
