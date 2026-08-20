@@ -17,7 +17,7 @@ function contrast(a: string, b: string): number {
 }
 
 test.describe('D01 style guide', () => {
-  test('style guide is visible at /style-guide with tokens, grain and ticket-stub CTA', async ({
+  test('style guide is visible at /style-guide with tokens, glassy card and stub CTA', async ({
     page,
   }) => {
     const response = await page.goto('/style-guide');
@@ -28,47 +28,45 @@ test.describe('D01 style guide', () => {
     const tokens = await page.evaluate(() => {
       const style = getComputedStyle(document.documentElement);
       return {
-        noir: style.getPropertyValue('--color-noir').trim(),
-        gold: style.getPropertyValue('--color-gold').trim(),
-        ivory: style.getPropertyValue('--color-ivory').trim(),
+        paper: style.getPropertyValue('--color-paper').trim(),
+        accent: style.getPropertyValue('--color-accent').trim(),
+        ink: style.getPropertyValue('--color-ink').trim(),
       };
     });
-    expect(tokens.noir).toBe('#141414');
-    expect(tokens.gold).toBe('#c9a84c');
-    expect(tokens.ivory).toBe('#f2f0eb');
+    expect(tokens.paper).toBe('#f4efe6');
+    expect(tokens.accent).toBe('#8a5a1b');
+    expect(tokens.ink).toBe('#2b241b');
 
     // C5 — ticket-stub CTA renders a real, labelled anchor.
-    const cta = page.getByRole('link', { name: /book the/i });
+    const cta = page.locator('.ticket-stub').getByRole('link', { name: /book the/i });
     await expect(cta).toHaveAttribute('href', '#booking');
 
-    // C3 — grain overlay is composable and hidden from assistive tech.
-    const grain = page.locator('.film-grain').first();
-    await expect(grain).toHaveAttribute('aria-hidden', 'true');
+    // Shell — the page renders inside a glassy card.
+    await expect(page.locator('.card').first()).toBeVisible();
   });
 
-  test('gold/ivory text pairs on noir pass WCAG AA in computed styles', async ({ page }) => {
+  test('ink/bronze text pairs on paper pass WCAG AA in computed styles', async ({ page }) => {
     await page.goto('/style-guide');
     const result = await page.evaluate(() => {
       const style = getComputedStyle(document.documentElement);
-      const noir = style.getPropertyValue('--color-noir').trim();
+      const paper = style.getPropertyValue('--color-paper').trim();
       const pairs = [
-        [style.getPropertyValue('--color-ivory').trim(), noir],
-        [style.getPropertyValue('--color-ivory-dim').trim(), noir],
-        [style.getPropertyValue('--color-gold').trim(), noir],
-        [style.getPropertyValue('--color-gold-bright').trim(), noir],
-        [style.getPropertyValue('--color-gold-deep').trim(), noir],
+        [style.getPropertyValue('--color-ink').trim(), paper],
+        [style.getPropertyValue('--color-ink-soft').trim(), paper],
+        [style.getPropertyValue('--color-accent').trim(), paper],
+        [style.getPropertyValue('--color-accent-deep').trim(), paper],
       ];
       const eyebrow = document.querySelector('.eyebrow');
       return {
         pairs,
-        renderedGold: eyebrow ? getComputedStyle(eyebrow).color : null,
+        renderedAccent: eyebrow ? getComputedStyle(eyebrow).color : null,
       };
     });
     for (const [fg, bg] of result.pairs) {
       expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(4.5);
     }
-    // The rendered gold accent resolves from the brass token (rgb(201, 168, 76)).
-    expect(result.renderedGold).toBe('rgb(201, 168, 76)');
+    // The rendered eyebrow resolves from the deep bronze token (rgb(111, 69, 16)).
+    expect(result.renderedAccent).toBe('rgb(111, 69, 16)');
   });
 
   test('type scale stays within the viewport at 360px–1440px and the minimal CTA card renders', async ({
@@ -83,7 +81,7 @@ test.describe('D01 style guide', () => {
       expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
     }
 
-    // C5 — the decluttered card is one quiet column: headline, status/value, labelled CTA.
+    // C5 — the card is one quiet column: headline, status/value, labelled CTA.
     await page.setViewportSize({ width: 360, height: 900 });
     await page.goto('/style-guide');
     const stub = page.locator('.ticket-stub').first();

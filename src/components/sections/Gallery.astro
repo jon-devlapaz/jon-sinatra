@@ -17,8 +17,8 @@ type GalleryWithSrc = GalleryItem & { src?: string };
 <section id="stage" class="py-24" aria-labelledby="stage-title">
   <div class="mx-auto max-w-5xl">
     <p class="eyebrow" id="stage-eyebrow">The Stage</p>
-    <h2 class="text-display text-ivory" id="stage-title">From the room</h2>
-    <p class="mt-4 max-w-2xl text-ivory-dim">
+    <h2 class="text-display text-ink" id="stage-title">From the room</h2>
+    <p class="mt-4 max-w-2xl text-ink-soft">
       The voice, when it's recorded. Audio, video, and photos of recent evenings are coming soon —
       the bookings come first.
     </p>
@@ -38,7 +38,7 @@ type GalleryWithSrc = GalleryItem & { src?: string };
               />
             ) : (
               <div class="absolute inset-0 grid place-items-center">
-                <span class="font-mono text-mono text-gold">{g.label}</span>
+                <span class="font-sans text-label text-accent-deep">{g.label}</span>
               </div>
             )}
             <figcaption class="sr-only">{g.alt}</figcaption>

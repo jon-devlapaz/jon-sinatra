@@ -146,11 +146,11 @@ export default function CalendarWidget({
     <div className="calendar-widget">
       <nav
         aria-label="Calendar month"
-        className="mt-8 flex items-center justify-between font-mono text-mono uppercase tracking-[0.18em] text-gold"
+        className="mt-8 flex items-center justify-between font-sans text-label font-semibold uppercase tracking-[0.18em] text-accent-deep"
       >
         <button
           type="button"
-          className="btn inline-block px-2 py-1 text-xs"
+          className="btn btn--ghost inline-block px-2 py-1 text-xs"
           onClick={() => goTo(-1)}
         >
           Prev
@@ -158,7 +158,7 @@ export default function CalendarWidget({
         <span aria-live="polite">{grid.label}</span>
         <button
           type="button"
-          className="btn inline-block px-2 py-1 text-xs"
+          className="btn btn--ghost inline-block px-2 py-1 text-xs"
           onClick={() => goTo(1)}
         >
           Next
@@ -168,12 +168,12 @@ export default function CalendarWidget({
       <div
         role="grid"
         aria-label="Availability calendar — arrow keys to move, Enter to choose a date"
-        className="mt-6 grid grid-cols-7 gap-1 font-mono text-mono"
+        className="mt-6 grid grid-cols-7 gap-1 font-sans text-sm"
         onKeyDown={handleKeyDown}
       >
         <div role="row" className="contents">
           {WEEKDAY_LABELS.map((label) => (
-            <div key={label} role="columnheader" className="py-2 text-center text-gold">
+            <div key={label} role="columnheader" className="py-2 text-center text-accent-deep">
               {label}
             </div>
           ))}
@@ -208,11 +208,11 @@ export default function CalendarWidget({
                   className={[
                     'rounded-md border py-2 text-center transition-colors',
                     isBooked
-                      ? 'cursor-not-allowed border-transparent text-ivory-dim/50 line-through'
+                      ? 'cursor-not-allowed border-transparent text-ink-faint line-through'
                       : isSelected
-                        ? 'border-gold bg-gold/15 text-gold-bright ring-1 ring-gold'
-                        : 'hairline-gold text-ivory hover:bg-noir-lift focus-visible:bg-noir-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
-                    isToday && !isSelected ? 'text-gold' : '',
+                        ? 'border-accent bg-accent text-paper ring-1 ring-accent'
+                        : 'border-card-border text-ink hover:bg-accent/10 focus-visible:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                    isToday && !isSelected ? 'font-semibold text-accent' : '',
                   ].join(' ')}
                 >
                   {day}
@@ -222,7 +222,7 @@ export default function CalendarWidget({
           </div>
         ))}
       </div>
-      <p className="mt-4 font-mono text-mono uppercase tracking-[0.18em] text-ivory-dim">
+      <p className="mt-4 font-sans text-label uppercase tracking-[0.18em] text-ink-soft">
         Pick an open date — it prefills the booking form below.
       </p>
     </div>

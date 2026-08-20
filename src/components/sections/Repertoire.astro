@@ -21,26 +21,26 @@ const eras = byEra(repertoire);
 <section id="repertoire" class="py-24" aria-labelledby="repertoire-title">
   <div class="mx-auto max-w-4xl">
     <p class="eyebrow" id="repertoire-eyebrow">The Repertoire</p>
-    <h2 class="text-display text-ivory" id="repertoire-title">Songs in the set list</h2>
-    <p class="mt-4 max-w-2xl text-ivory-dim">
+    <h2 class="text-display text-ink" id="repertoire-title">Songs in the set list</h2>
+    <p class="mt-4 max-w-2xl text-ink-soft">
       A running order of standards, swinging numbers, and late-night ballads.
     </p>
 
     {
       Object.entries(eras).map(([era, songs]) => (
         <section class="mt-12" aria-label={era}>
-          <h3 class="font-mono text-mono uppercase tracking-[0.2em] text-gold">{era}</h3>
-          <ul class="mt-4 list-none divide-y divide-gold/20">
+          <h3 class="font-sans text-label uppercase tracking-[0.2em] text-accent-deep">{era}</h3>
+          <ul class="mt-4 list-none divide-y divide-card-border">
             {songs.map((s, i) => (
               <li class="grid grid-cols-[2rem_1fr] py-3 last:border-0">
-                <span class="font-mono text-mono text-gold-bright">{i + 1}</span>
+                <span class="font-sans text-label text-accent">{i + 1}</span>
                 <div>
-                  <span class="font-display text-title text-ivory">{s.data.title}</span>
+                  <span class="font-medium text-title text-ink">{s.data.title}</span>
                   {s.data.duration && (
-                    <span class="font-mono text-mono text-ivory-dim"> · {s.data.duration}</span>
+                    <span class="font-sans text-label text-ink-soft"> · {s.data.duration}</span>
                   )}
                   {s.data.notes && (
-                    <p class="mt-1 max-w-lg text-sm text-ivory-dim">{s.data.notes}</p>
+                    <p class="mt-1 max-w-lg text-sm text-ink-soft">{s.data.notes}</p>
                   )}
                 </div>
               </li>

@@ -136,21 +136,21 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
   return (
     <div className="booking-form">
       {status === 'ok' ? (
-        <div role="status" className="gatefold mt-10 grid gap-4 text-center" aria-live="polite">
+        <div role="status" className="card mt-10 grid gap-4 p-8 text-center" aria-live="polite">
           <p className="eyebrow" id="booking-ok-eyebrow">
             Received
           </p>
-          <h3 className="text-display text-ivory">The date is pencilled in.</h3>
-          <p className="mx-auto max-w-md text-ivory-dim">
+          <h3 className="text-display text-ink">The date is pencilled in.</h3>
+          <p className="mx-auto max-w-md text-ink-soft">
             Thank you — I'll confirm availability within 24 hours. If you'd like to chat sooner,
             write to{' '}
-            <a className="text-gold underline underline-offset-4" href={`mailto:${mailto}`}>
+            <a className="text-accent-deep underline underline-offset-4" href={`mailto:${mailto}`}>
               {mailto}
             </a>
             .
           </p>
           <div>
-            <button type="button" className="btn mt-4" onClick={reset}>
+            <button type="button" className="btn btn--ghost mt-4" onClick={reset}>
               Make another enquiry
             </button>
           </div>
@@ -186,7 +186,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
 
           <div className="grid gap-1">
             <label
-              className="font-mono text-mono uppercase tracking-[0.12em] text-gold"
+              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
               htmlFor="name"
             >
               Name
@@ -200,10 +200,10 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('name', e.target.value)}
               aria-invalid={errors.name ? true : undefined}
               aria-describedby={errors.name ? 'name-error' : undefined}
-              className="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+              className="input"
             />
             {errors.name && (
-              <p id="name-error" className="font-mono text-mono text-gold-bright">
+              <p id="name-error" className="font-sans text-label font-semibold text-accent-deep">
                 {errors.name}
               </p>
             )}
@@ -211,7 +211,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
 
           <div className="grid gap-1">
             <label
-              className="font-mono text-mono uppercase tracking-[0.12em] text-gold"
+              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
               htmlFor="email"
             >
               Email
@@ -225,10 +225,10 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('email', e.target.value)}
               aria-invalid={errors.email ? true : undefined}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              className="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+              className="input"
             />
             {errors.email && (
-              <p id="email-error" className="font-mono text-mono text-gold-bright">
+              <p id="email-error" className="font-sans text-label font-semibold text-accent-deep">
                 {errors.email}
               </p>
             )}
@@ -236,7 +236,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
 
           <div className="grid gap-1">
             <label
-              className="font-mono text-mono uppercase tracking-[0.12em] text-gold"
+              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
               htmlFor="date"
             >
               Event date
@@ -250,10 +250,10 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('date', e.target.value)}
               aria-invalid={errors.date ? true : undefined}
               aria-describedby={errors.date ? 'date-error' : undefined}
-              className="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+              className="input"
             />
             {errors.date && (
-              <p id="date-error" className="font-mono text-mono text-gold-bright">
+              <p id="date-error" className="font-sans text-label font-semibold text-accent-deep">
                 {errors.date}
               </p>
             )}
@@ -261,7 +261,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
 
           <div className="grid gap-1">
             <label
-              className="font-mono text-mono uppercase tracking-[0.12em] text-gold"
+              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
               htmlFor="package"
             >
               Package
@@ -272,13 +272,13 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               type="text"
               readOnly
               value={values.package}
-              className="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory-dim outline-none"
+              className="input text-ink-soft"
             />
           </div>
 
           <div className="grid gap-1">
             <label
-              className="font-mono text-mono uppercase tracking-[0.12em] text-gold"
+              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
               htmlFor="message"
             >
               Message
@@ -292,17 +292,21 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('message', e.target.value)}
               aria-invalid={errors.message ? true : undefined}
               aria-describedby={errors.message ? 'message-error' : undefined}
-              className="w-full rounded-md border hairline-gold bg-noir-lift px-4 py-2 text-ivory outline-none ring-gold focus-within:ring-2"
+              className="input"
             ></textarea>
             {errors.message && (
-              <p id="message-error" className="font-mono text-mono text-gold-bright">
+              <p id="message-error" className="font-sans text-label font-semibold text-accent-deep">
                 {errors.message}
               </p>
             )}
           </div>
 
           {status === 'error' && (
-            <p role="alert" className="font-mono text-mono text-gold-bright" aria-live="assertive">
+            <p
+              role="alert"
+              className="font-sans text-label font-semibold text-accent-deep"
+              aria-live="assertive"
+            >
               {errorMessage}
             </p>
           )}
@@ -310,20 +314,27 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
           <div className="grid gap-3 pt-2">
             <button
               type="submit"
-              className="btn w-full justify-center"
+              className={[
+                'btn w-full justify-center',
+                status === 'pending' ? 'btn--processing' : '',
+              ].join(' ')}
               disabled={status === 'pending'}
+              aria-busy={status === 'pending'}
             >
               {status === 'pending' ? 'Sending…' : 'Send the booking'}
             </button>
-            <p className="text-center font-mono text-mono text-ivory-dim">
+            <p className="text-center font-sans text-sm text-ink-soft">
               Prefer to write?{' '}
-              <a className="text-gold underline underline-offset-4" href={`mailto:${mailto}`}>
+              <a
+                className="text-accent-deep underline underline-offset-4"
+                href={`mailto:${mailto}`}
+              >
                 Email {mailto}
               </a>
             </p>
           </div>
 
-          <p className="font-mono text-mono text-ivory-dim/70">
+          <p className="font-sans text-sm text-ink-soft">
             Your details are used only to reply to this enquiry — no lists, no spam, ever.
           </p>
         </form>
