@@ -1,0 +1,6 @@
+/*
+ * B01 scaffold: Tailwind CSS v4 entry point.
+ * NOTE: D01 owns the design-system layer (theme tokens, type scale, grain,
+ * ticket-stub primitives) and extends this file there.
+ */
+@import 'tailwindcss';
