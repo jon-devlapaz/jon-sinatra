@@ -57,3 +57,20 @@ test.describe('LG2 static profile (no JS)', () => {
     await expect(page.getByText(/The room went silent/)).toBeVisible();
   });
 });
+
+test.describe('LG4 home page styling ships', () => {
+  test('home page links its theme stylesheet and applies the noir design', async ({ page }) => {
+    await page.goto('/');
+    const stylesheet = page.locator('link[rel="stylesheet"]');
+    await expect(stylesheet).toHaveCount(1);
+
+    // Computed styles prove the Tailwind + token CSS actually reached the page.
+    await expect
+      .poll(() => page.evaluate(() => getComputedStyle(document.body).backgroundColor))
+      .toBe('rgb(20, 20, 20)');
+    const h1 = page.getByRole('heading', { level: 1 });
+    await expect
+      .poll(() => h1.evaluate((el) => getComputedStyle(el).fontFamily))
+      .toContain('Bodoni Moda');
+  });
+});
