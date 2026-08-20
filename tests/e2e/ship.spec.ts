@@ -33,7 +33,7 @@ test.describe('I01 ship metadata', () => {
     );
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       'content',
-      /keeper of the great American songbook/,
+      /Classic oldies crooner/,
     );
   });
 

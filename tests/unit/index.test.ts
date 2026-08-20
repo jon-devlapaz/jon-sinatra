@@ -45,15 +45,15 @@ describe('index page (single-page profile)', () => {
 
     // F01 — marquee headline + primary booking CTA.
     expect(html).toContain('id="marquee"');
-    expect(html).toContain('>Jon Sinatra<');
+    expect(html).toContain('>Jon Delapaz<');
     expect(html).toContain('href="#booking?package=standard"');
 
     // F02 — voice fact strip + quote.
     expect(html).toContain('id="voice"');
     expect(html).toContain('Range');
-    expect(html).toContain('Baritone, two octaves');
+    expect(html).toContain('Baritone');
     expect(html).toContain('Open — tell me your date');
-    expect(html).toContain('The best sets are the ones where you can hear a pin drop');
+    expect(html).toContain('waiting for the right room');
 
     // F03 — repertory driven from the collection.
     expect(html).toContain('id="repertoire"');
@@ -68,9 +68,9 @@ describe('index page (single-page profile)', () => {
     // F05 — gallery frames.
     expect(html).toContain('id="stage"');
 
-    // F06 — testimonial collection.
+    // F06 — testimonial collection (empty until real quotes land).
     expect(html).toContain('id="word"');
-    expect(html).toContain('The room went silent the moment he opened his mouth');
+    expect(html).toContain('No quotes yet');
 
     // F07 — calendar island mounted on its shell (internals covered by
     // calendar-widget.test.tsx via jsdom; container emits the island wrapper).
@@ -103,7 +103,7 @@ describe('index page (single-page profile)', () => {
     // Open Graph + Twitter cards, with an absolute OG image.
     expect(html).toContain('<meta property="og:type" content="website">');
     expect(html).toContain(
-      '<meta property="og:title" content="Jon Sinatra — Lounge Singer &#38; Performer">',
+      '<meta property="og:title" content="Jon Delapaz — Classic Oldies Crooner">',
     );
     expect(html).toContain(
       '<meta property="og:image" content="https://jonsinatra.example/og.jpg">',
@@ -114,10 +114,10 @@ describe('index page (single-page profile)', () => {
     );
 
     // SEO essentials.
-    expect(html).toContain('<title>Jon Sinatra — Lounge Singer &amp; Performer</title>');
+    expect(html).toContain('<title>Jon Delapaz — Classic Oldies Crooner</title>');
     expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1">');
     expect(html).toContain(
-      '<meta name="description" content="Lounge singer &#38; keeper of the great American songbook">',
+      '<meta name="description" content="Classic oldies crooner — Sinatra-style">',
     );
     expect(html).toContain('<link rel="icon" type="image/svg+xml" href="/favicon.svg">');
   });

@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "sync": "astro sync",
+    "clean:content": "rm -rf node_modules/.astro .astro dist && npm run sync",
     "check": "astro check && tsc --noEmit",
     "build": "astro build",
     "preview": "astro preview",

@@ -39,7 +39,7 @@ export interface Profile {
   marqueeSubtitle: string;
   /** Short third-person bio (F02). */
   bio: string;
-  /** "In his own words" pull quote (F02). */
+  /** Pull quote — the site's voice, not a client testimonial (F02). */
   quote: string;
   portraitAlt: string;
   portraitLabel: string;
@@ -54,16 +54,16 @@ export interface Profile {
 }
 
 export const profile: Profile = {
-  name: 'Jon Sinatra',
-  tagline: 'Lounge singer & keeper of the great American songbook',
-  marqueeSubtitle: 'Now appearing — lounge & supper club',
-  bio: 'Jon Sinatra channels the intimacy of the Rat Pack era with a voice cut for cedar-panelled rooms, low lights, and a single spotlight. He performs classic standards, swinging mid-tempo numbers, and late-night ballads — arranged for small combo or small orchestra. Available for supper clubs, private galas, corporate gatherings, and intimate in-house concerts.',
-  quote: 'The best sets are the ones where you can hear a pin drop between the notes.',
-  portraitAlt: 'Jon Sinatra in a tuxedo, microphone at waist',
-  portraitLabel: 'Portrait — Jon Sinatra',
+  name: 'Jon Delapaz',
+  tagline: 'Classic oldies crooner — Sinatra-style',
+  marqueeSubtitle: 'Now appearing — weddings, bar mitzvahs & late-night bars',
+  bio: 'Jon Delapaz sings the classic oldies — the songs of Sinatra, Martin, Bennett, and the songbook that made them timeless. From a quiet first-dance ballad to a swing number the whole room knows by heart, his voice suits weddings, bar mitzvahs, engagement parties, and long nights in bars and clubs. Available solo for the evening, or with a band hired to fit the room.',
+  quote: "The classic songs aren't old — they're waiting for the right room.",
+  portraitAlt: 'Jon Delapaz — classic oldies crooner',
+  portraitLabel: 'Portrait — Jon Delapaz',
   facts: [
-    { dt: 'Range', dd: 'Baritone, two octaves' },
-    { dt: 'Venue', dd: 'Supper clubs, galas, in-house concerts' },
+    { dt: 'Range', dd: 'Baritone' },
+    { dt: 'Venue', dd: 'Weddings, bar mitzvahs, bars & clubs' },
     { dt: 'Bookings', dd: 'Open — tell me your date' },
   ],
   packages: [
@@ -72,49 +72,39 @@ export const profile: Profile = {
       eyebrow: 'Cocktail Hour',
       title: 'Intimate lounge set',
       blurb:
-        'A 45-minute trio set of standards — perfect for arrivals, cocktails, or a quiet corner table.',
-      stubValue: '$1,200',
+        'A 45-minute set of classic oldies and standards — perfect for arrivals, cocktails, or a quiet corner table.',
+      stubValue: 'Enquire',
       status: 'On request',
       ctaHref: '#booking?package=cocktail',
     },
     {
       id: 'standard',
       eyebrow: 'The Standard',
-      title: 'Full two-hour show',
+      title: 'The full evening',
       blurb:
-        'A full programme of swing, bossa nova and ballads, with interval — the signature evening.',
-      stubValue: '$3,200',
+        'Two sets with an interval — first-dance ballads, swing numbers, and everything in between. The signature evening.',
+      stubValue: 'Enquire',
       status: 'Most requested',
       ctaHref: '#booking?package=standard',
     },
     {
       id: 'gala',
       eyebrow: 'Gala',
-      title: 'Orchestra night',
+      title: 'Ceremony & celebration',
       blurb:
-        'A twelve-piece set list for larger rooms and headliner billing, including a signature closing number.',
-      stubValue: '$ — on request',
+        'A tailored programme for weddings and bar mitzvahs — the ceremony song, the first dance, and a reception set the room will sing along to.',
+      stubValue: 'Enquire',
       status: 'On request',
       ctaHref: '#booking?package=gala',
     },
   ],
   gallery: [
-    { alt: 'Jon Sinatra at the mic, low-lit', label: 'On stage' },
-    { alt: 'Trio in a supper club, warm lamplight', label: 'Supper club' },
-    { alt: 'Headshot, black and white, tuxedo', label: 'Headshot' },
-    { alt: 'Piano and upright bass, late night', label: 'The rhythm section' },
+    { alt: 'Audio sample — coming soon', label: 'Audio' },
+    { alt: 'Video sample — coming soon', label: 'Video' },
+    { alt: 'Stage photos — coming soon', label: 'Photos' },
+    { alt: 'Live set — coming soon', label: 'Live' },
   ],
-  blockedDates: [
-    '2026-09-12',
-    '2026-09-26',
-    '2026-10-03',
-    '2026-10-17',
-    '2026-11-07',
-    '2026-11-21',
-  ],
-  contact: { email: 'bookings@example.com', phone: '+1 (212) 555 0199' },
-  socials: [
-    { label: 'Instagram', href: 'https://instagram.com/example' },
-    { label: 'YouTube', href: 'https://youtube.com/example' },
-  ],
+  blockedDates: [],
+  contact: { email: 'jonathan10620@gmail.com', phone: '+1 (830) 237-3964' },
+  socials: [],
 };

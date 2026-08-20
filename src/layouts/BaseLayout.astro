@@ -15,8 +15,8 @@ interface Props {
 
 const {
   title,
-  description = 'Jon Sinatra — lounge singer and performer.',
-  image = '/og.png',
+  description = 'Jon Delapaz — classic oldies crooner, Sinatra-style.',
+  image = '/og.jpg',
 } = Astro.props;
 
 // Absolute URLs for canonical/OG so the page is identical on any static host.
@@ -50,7 +50,7 @@ const navItems = [
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Jon Sinatra" />
+    <meta property="og:site_name" content="Jon Delapaz" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={pageUrl} />

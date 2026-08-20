@@ -8,7 +8,7 @@ test.describe('LG2 static profile (no JS)', () => {
 
   test('renders every section with real content in DOM order', async ({ page }) => {
     await page.goto('/');
-    expect(await page.title()).toMatch(/Jon Sinatra/);
+    expect(await page.title()).toMatch(/Jon Delapaz/);
 
     const ids = [
       'marquee',
@@ -52,9 +52,9 @@ test.describe('LG2 static profile (no JS)', () => {
     await expect(page.getByText('Fly Me to the Moon')).toBeVisible();
   });
 
-  test('testimonials render verbatim from the collection', async ({ page }) => {
+  test('testimonials render honestly (empty state until real quotes land)', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText(/The room went silent/)).toBeVisible();
+    await expect(page.getByText(/No quotes yet/)).toBeVisible();
   });
 });
 

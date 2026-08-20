@@ -37,11 +37,11 @@ const html = `<!doctype html>
   <div class="inner"></div>
   <div class="wrap">
     <p class="eyebrow">Now appearing</p>
-    <h1 class="name">Jon Sinatra</h1>
+    <h1 class="name">Jon Delapaz</h1>
     <div class="rule"></div>
-    <p class="tag">Lounge singer &amp; keeper of the great American songbook</p>
+    <p class="tag">Classic oldies crooner &mdash; Sinatra-style</p>
   </div>
-  <p class="foot">Enquire about a date</p>
+  <p class="foot">Book your date</p>
 </body>
 </html>`;
 
