@@ -10,17 +10,7 @@ test.describe('LG2 static profile (no JS)', () => {
     await page.goto('/');
     expect(await page.title()).toMatch(/Jon Delapaz/);
 
-    const ids = [
-      'marquee',
-      'voice',
-      'repertoire',
-      'show',
-      'stage',
-      'word',
-      'calendar',
-      'booking',
-      'encore',
-    ];
+    const ids = ['marquee', 'about', 'music', 'booking', 'contact'];
     const sections = page.locator('section[id]');
     const count = await sections.count();
     const present: string[] = [];
@@ -29,12 +19,12 @@ test.describe('LG2 static profile (no JS)', () => {
     }
     for (const id of ids) expect(present).toContain(id);
 
-    // DOM order: marquee first, encore last.
+    // DOM order: marquee first, contact last.
     expect(present[0]).toBe('marquee');
-    expect(present[present.length - 1]).toBe('encore');
+    expect(present[present.length - 1]).toBe('contact');
   });
 
-  test('marquee and package CTAs target the booking form', async ({ page }) => {
+  test('booking CTAs target the booking form', async ({ page }) => {
     await page.goto('/');
     const ctaLocator = page.locator('a[href^="#booking"]');
     const n = await ctaLocator.count();
@@ -46,15 +36,9 @@ test.describe('LG2 static profile (no JS)', () => {
     expect(hrefs.some((h: string) => h.includes('package=standard'))).toBe(true);
   });
 
-  test('repertoire is data-driven (songs render from the collection)', async ({ page }) => {
+  test('the music section shows the honest empty state until MP3s land', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: /Songs in the set list/i })).toBeVisible();
-    await expect(page.getByText('Fly Me to the Moon')).toBeVisible();
-  });
-
-  test('testimonials render honestly (empty state until real quotes land)', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.getByText(/No quotes yet/)).toBeVisible();
+    await expect(page.getByText(/No recordings yet/)).toBeVisible();
   });
 });
 

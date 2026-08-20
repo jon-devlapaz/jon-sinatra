@@ -1,18 +1,13 @@
 ---
 /**
- * Page: index — the single-page performer profile (LG2 static surface).
- * Sections in order: Marquee → Voice → Repertoire → Show → Stage → Word
- * → Calendar → Booking → Encore. Composed from D01 primitives + content
- * collections. The F07/F08 static shells are enhanced by React islands in LG3.
+ * Page: index — the single-page performer profile (minimal: About → Music →
+ * Book → Contact). Composed from D01 primitives. The F08 booking island is
+ * enhanced by React in LG3; everything else is static.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Marquee from '../components/sections/Marquee.astro';
 import Bio from '../components/sections/Bio.astro';
-import Repertoire from '../components/sections/Repertoire.astro';
-import Packages from '../components/sections/Packages.astro';
-import Gallery from '../components/sections/Gallery.astro';
-import Testimonials from '../components/sections/Testimonials.astro';
-import CalendarShell from '../components/sections/CalendarShell.astro';
+import Music from '../components/sections/Music.astro';
 import BookingShell from '../components/sections/BookingShell.astro';
 import Footer from '../components/sections/Footer.astro';
 import { profile } from '../data/profile';
@@ -25,11 +20,7 @@ import { profile } from '../data/profile';
 >
   <Marquee name={profile.name} subtitle={profile.marqueeSubtitle} tagline={profile.tagline} />
   <Bio profile={profile} />
-  <Repertoire />
-  <Packages profile={profile} />
-  <Gallery profile={profile} />
-  <Testimonials />
-  <CalendarShell bookedDates={profile.blockedDates} />
+  <Music />
   <BookingShell profile={profile} />
   <Footer profile={profile} />
 </BaseLayout>

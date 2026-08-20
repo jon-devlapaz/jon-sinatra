@@ -1,6 +1,6 @@
 ---
 /**
- * F02 — The Voice.
+ * F02 — About.
  * Bio: portrait (media-frame placeholder until a real asset lands), key facts
  * strip, and a pull quote in the site's voice.
  */
@@ -20,7 +20,7 @@ function initials(str: string): string {
 }
 ---
 
-<section id="voice" class="py-24" aria-labelledby="voice-title">
+<section id="about" class="py-24" aria-labelledby="about-title">
   <div class="grid gap-12 md:grid-cols-[16rem_1fr] items-start">
     <!-- C3 — portrait frame (no asset: themed placeholder) -->
     <div class="media-frame">
@@ -30,8 +30,8 @@ function initials(str: string): string {
     </div>
 
     <div>
-      <p class="eyebrow" id="voice-eyebrow">The Voice</p>
-      <h2 class="text-display text-ink" id="voice-title">{profile.name}</h2>
+      <p class="eyebrow" id="about-eyebrow">About me</p>
+      <h2 class="text-display font-medium text-ink" id="about-title">{profile.name}</h2>
       <div class="rule my-6 w-24"></div>
 
       <p class="text-ink">{profile.bio}</p>

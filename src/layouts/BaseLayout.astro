@@ -25,14 +25,10 @@ const origin =
 const pageUrl = new URL(Astro.url.pathname, origin).href;
 const ogImage = new URL(image, origin).href;
 const navItems = [
-  { id: 'marquee', label: 'Home' },
-  { id: 'voice', label: 'The Voice' },
-  { id: 'repertoire', label: 'The Repertoire' },
-  { id: 'show', label: 'The Show' },
-  { id: 'stage', label: 'The Stage' },
-  { id: 'word', label: 'The Word' },
-  { id: 'calendar', label: 'The Calendar' },
-  { id: 'booking', label: 'The Booking' },
+  { id: 'about', label: 'About' },
+  { id: 'music', label: 'Music' },
+  { id: 'booking', label: 'Book' },
+  { id: 'contact', label: 'Contact' },
 ];
 ---
 

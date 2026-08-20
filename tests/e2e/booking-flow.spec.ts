@@ -12,25 +12,7 @@ async function waitForHydration(page: import('@playwright/test').Page) {
   await page.waitForFunction(() => !document.querySelector('astro-island[ssr]'));
 }
 test.describe('LG3 booking flow', () => {
-  test('calendar date selection prefills the booking form date', async ({ page }) => {
-    await waitForHydration(page);
-
-    const calendar = page.getByRole('grid', { name: /availability calendar/i });
-    await expect(calendar).toBeVisible();
-
-    // Pick an open day in the visible month (August 2026 — none of the
-    // sample blocked dates fall in it).
-    await calendar.getByRole('gridcell', { name: '5', exact: true }).click();
-
-    const dateInput = page.getByLabel('Event date');
-    await expect(dateInput).toHaveValue(/^\d{4}-\d{2}-05$/);
-
-    // The selection is committed to the URL for deep-linking.
-    await expect(page).toHaveURL(/#booking$/);
-    expect(new URL(page.url()).searchParams.get('date')).toMatch(/-\d{2}-05$/);
-  });
-
-  test('a package CTA prefills the package field and the form submits successfully', async ({
+  test('a booking CTA prefills the package field and the form submits successfully', async ({
     page,
   }) => {
     // Intercept the configured form endpoint and answer a success.
