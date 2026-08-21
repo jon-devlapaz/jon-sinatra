@@ -67,12 +67,12 @@ describe('BookingForm', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, status: 200 }));
     render(<BookingForm {...props} endpoint="https://form.example/send" />);
     await fillValidForm(user)();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /make another enquiry/i }));
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /send another note/i }));
     expect(screen.getByLabelText('Name')).toHaveValue('');
     expect(screen.getByLabelText('Event date')).toHaveValue('');
-    expect(screen.getByRole('button', { name: /send the booking/i })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /send my note/i })).toBeEnabled();
   });
 
   it('leaves the package alone when the URL carries no package', async () => {
@@ -93,7 +93,7 @@ describe('BookingForm', () => {
     fireEvent.change(screen.getByLabelText('Message'), {
       target: { value: 'x'.repeat(1001) },
     });
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
     const message = screen.getByLabelText('Message');
     expect(message).toHaveAttribute('aria-invalid', 'true');
     expect(message.getAttribute('aria-describedby')).toBe('message-error');
@@ -103,7 +103,7 @@ describe('BookingForm', () => {
   it('shows inline errors and blocks submit for an invalid form', async () => {
     const user = userEvent.setup();
     render(<BookingForm {...props} />);
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
     expect(screen.getByText(/please add your name/i)).toBeInTheDocument();
     expect(screen.getByText(/add an email/i)).toBeInTheDocument();
     const name = screen.getByLabelText('Name');
@@ -128,8 +128,8 @@ describe('BookingForm', () => {
     const honeypot = screen.getByLabelText(/leave this empty/i);
     await user.type(honeypot, 'spambot');
     await fillValidForm(user)();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -139,8 +139,8 @@ describe('BookingForm', () => {
     vi.stubGlobal('fetch', fetchMock);
     render(<BookingForm {...props} endpoint="https://form.example/send" />);
     await fillValidForm(user)();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][0]).toBe('https://form.example/send');
     expect(fetchMock.mock.calls[0][1].method).toBe('POST');
@@ -155,11 +155,11 @@ describe('BookingForm', () => {
     vi.stubGlobal('fetch', fetchMock);
     render(<BookingForm {...props} endpoint="https://form.example/send" />);
     await fillValidForm(user)();
-    const submit = screen.getByRole('button', { name: /send the booking/i });
+    const submit = screen.getByRole('button', { name: /send my note/i });
     await user.click(submit);
     expect(await screen.findByText(/didn't go through/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
   });
 
   it('hands off to a mailto link when no endpoint is configured', async () => {
@@ -172,8 +172,8 @@ describe('BookingForm', () => {
     vi.stubGlobal('fetch', vi.fn());
     render(<BookingForm {...props} />);
     await fillValidForm(user)();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
     expect(assign).toHaveBeenCalledTimes(1);
     expect(String(assign.mock.calls[0][0])).toMatch(/^mailto:bookings@example\.com/);
   });
@@ -191,11 +191,11 @@ describe('BookingForm', () => {
     );
     render(<BookingForm {...props} endpoint="https://form.example/send" />);
     await fillValidForm(user)();
-    await user.click(screen.getByRole('button', { name: /send the booking/i }));
+    await user.click(screen.getByRole('button', { name: /send my note/i }));
     const submit = screen.getByRole('button', { name: /sending/i });
     expect(submit).toBeDisabled();
     resolveFetch!({ ok: true, status: 200 });
-    expect(await screen.findByText(/date is pencilled in/i)).toBeInTheDocument();
+    expect(await screen.findByText(/thanks, i received your note/i)).toBeInTheDocument();
   });
 
   it('renders the mailto dual-channel link beside the form', () => {

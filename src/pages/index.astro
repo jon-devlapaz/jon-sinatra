@@ -1,26 +1,47 @@
 ---
 /**
- * Page: index — the single-page performer profile (minimal: About → Music →
- * Book → Contact). Composed from D01 primitives. The F08 booking island is
- * enhanced by React in LG3; everything else is static.
+ * Page: index — Aurelian Gallery single-page performer profile.
+ * Sections: Hero → About → BookingBar → Footer.
+ * Header rendered via BaseLayout.
+ * BookingForm React island hydrates on the BookingBar shell.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Marquee from '../components/sections/Marquee.astro';
-import Bio from '../components/sections/Bio.astro';
+import Hero from '../components/sections/Hero.astro';
+import About from '../components/sections/About.astro';
 import Music from '../components/sections/Music.astro';
 import BookingShell from '../components/sections/BookingShell.astro';
+import InfoSections from '../components/sections/InfoSections.astro';
 import Footer from '../components/sections/Footer.astro';
 import { profile } from '../data/profile';
+
+const packageId = Astro.url.searchParams.get('package') || undefined;
+const date = Astro.url.searchParams.get('date') || undefined;
 ---
 
 <BaseLayout
-  title={`${profile.name} — Classic Oldies Crooner`}
-  description={profile.tagline}
-  image="/og.jpg"
+  title={`${profile.name} — Lounge Singer & Performer`}
+  description={profile.heroBody}
+  image={profile.heroImage.src}
 >
-  <Marquee name={profile.name} subtitle={profile.marqueeSubtitle} tagline={profile.tagline} />
-  <Bio profile={profile} />
-  <Music />
-  <BookingShell profile={profile} />
-  <Footer profile={profile} />
+  <Hero
+    name={profile.name}
+    subtitle={profile.heroSubtitle}
+    body={profile.heroBody}
+    image={profile.heroImage}
+    ctaHref="#booking"
+    ctaLabel="Talk about your event"
+  />
+<About
+  eyebrow={profile.aboutEyebrow}
+     headline={profile.aboutHeadline}
+     body={profile.aboutBody}
+     link={profile.aboutLink}
+   />
+   <Music />
+   <BookingShell profile={profile} packageId={packageId} date={date} />
+  <InfoSections email={profile.contact.email} />
+   <Footer
+     brandName={profile.name}
+     links={profile.footerLinks}
+   />
 </BaseLayout>

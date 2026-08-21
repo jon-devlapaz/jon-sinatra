@@ -1,0 +1,64 @@
+---
+/**
+ * F01 — Hero (Aurelian Gallery).
+ * Asymmetrical grid: text (col-span-7) + framed image (col-span-5, -ml-12).
+ * Headline: display-lg / display-lg-mobile, Bodoni Moda 200, tracking-tighter.
+ * Accent span: text-primary italic.
+ * Body: body-lg, DM Sans 300, text-on-surface-variant, font-light, leading-relaxed.
+ * CTA: BookingCTA primary variant.
+ * Image: FramedImage with gallery-img filter.
+ */
+import FramedImage from '../primitives/FramedImage.astro';
+import BookingCTA from '../primitives/BookingCTA.astro';
+
+interface Props {
+  name: string;
+  subtitle: string;        // "An Elegant Legacy"
+  body: string;            // Hero body copy
+  image: { src: string; alt: string };
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+
+const {
+  name,
+  subtitle,
+  body,
+  image,
+  ctaHref = '#booking',
+  ctaLabel = 'Talk about your event',
+} = Astro.props;
+---
+
+<section id="hero" aria-labelledby="hero-title" class="section-gap pt-16 md:pt-32">
+  <div class="container-page">
+    <div class="hero-grid items-center gap-gutter">
+      <!-- Text Content -->
+      <div class="hero-text flex flex-col gap-6 z-10">
+        <p class="font-label text-label-sm text-primary">Classic crooner</p>
+        <h1 class="font-display text-display-lg-mobile md:text-display-lg text-on-surface tracking-tighter leading-tight" id="hero-title">
+          {name}<br />
+          <span class="text-primary italic">{subtitle}</span>
+        </h1>
+        <p class="font-body text-body-lg text-on-surface-variant font-light leading-relaxed max-w-lg">
+          {body}
+        </p>
+        <div class="pt-8">
+          <BookingCTA href={ctaHref} label={ctaLabel} variant="primary" />
+        </div>
+      </div>
+
+      <!-- Hero Image (Asymmetrical placement) -->
+      <div class="hero-image relative">
+        <FramedImage
+          src={image.src}
+          alt={image.alt}
+          aspectRatio="3/4"
+        />
+        <p class="hero-image-caption font-label text-label-sm text-on-surface-variant">
+          Jon Delapaz <span aria-hidden="true">/</span> Sinatra-style vocals <span aria-hidden="true">/</span> select dates
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

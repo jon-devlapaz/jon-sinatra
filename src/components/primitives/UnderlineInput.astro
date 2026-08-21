@@ -1,0 +1,34 @@
+---
+/**
+ * D01 Primitive — UnderlineInput.
+ * Minimalist underline-only input with label. Used in BookingBar.
+ * Label: label-sm, uppercase, tracking-wide, on-surface-variant.
+ * Input: transparent bg, bottom border outline-variant → primary on focus.
+ */
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  placeholder?: string;
+  type?: 'text' | 'date' | 'email';
+  required?: boolean;
+  value?: string;
+  class?: string;
+}
+
+const { id, name, label, placeholder, type = 'text', required = false, value = '', class: className = '' } = Astro.props;
+---
+
+<div class={`w-full ${className}`}>
+  <label class="underline-label" for={id}>{label}</label>
+  <input
+    class="underline-input"
+    id={id}
+    name={name}
+    type={type}
+    placeholder={placeholder}
+    required={required}
+    value={value}
+    aria-required={required}
+  />
+</div>

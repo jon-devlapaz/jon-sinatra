@@ -1,0 +1,181 @@
+---
+/**
+ * D01 Primitive -- Header (glassmorphism) -- SMALL BRAND DRAWER.
+ * Variant 4: Brand shrunk to 32px on mobile with tighter spacing.
+ * Keeps split drawer interaction. Better balance on small screens.
+ */
+interface Props {
+  brandName: string;
+  navItems?: { id: string; label: string }[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  brandName,
+  navItems = [
+    { id: 'music', label: 'MUSIC' },
+    { id: 'about', label: 'ABOUT' },
+  ],
+  ctaLabel = 'BOOKING',
+  ctaHref = '#booking',
+} = Astro.props;
+---
+
+<header class="glass-header" role="banner" data-variate-section="header">
+  <nav class="main-nav container-page grid grid-cols-[1fr_auto_1fr] items-center gap-3 py-3" aria-label="Main navigation">
+    <!-- Brand -->
+    <a
+      class="font-display text-headline-md text-primary tracking-widest hover:opacity-70 transition-opacity duration-500 whitespace-nowrap"
+      href="#top"
+      aria-label={`${brandName} — home`}
+    >
+      {brandName}
+    </a>
+
+    <!-- Desktop Nav (hidden on mobile) -->
+    <div class="hidden md:flex items-center gap-3 font-label text-subheading-caps">
+      {navItems.map((item) => (
+        <a
+          class="text-on-surface-variant hover:text-primary transition-colors duration-300 nav-link-underline"
+          href={`#${item.id}`}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+
+    <!-- Trailing CTA (hidden on mobile) -->
+    <div class="hidden md:block">
+      <a
+        class="font-label text-subheading-caps text-primary border-b-[0.5px] border-primary pb-1 hover:opacity-70 transition-opacity duration-500"
+        href={ctaHref}
+      >
+        {ctaLabel}
+      </a>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button
+      class="md:hidden text-primary"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-drawer"
+      data-drawer-toggle
+    >
+      <span class="material-symbols-outlined text-[20px]">menu</span>
+    </button>
+  </nav>
+
+  <!-- Mobile Drawer (full-screen center) -->
+  <div
+    id="mobile-drawer"
+    class="fixed inset-0 z-50 bg-surface/95 backdrop-blur-[30px] flex flex-col items-center justify-center gap-8 md:hidden opacity-0 pointer-events-none transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation"
+    data-drawer
+  >
+    <nav class="flex flex-col items-center gap-6 text-center">
+      {navItems.map((item) => (
+        <a
+          class="font-display text-headline-md text-on-surface hover:text-primary transition-colors duration-300 nav-link-underline"
+          href={`#${item.id}`}
+          data-drawer-link
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        class="font-label text-subheading-caps text-primary border-b-[0.5px] border-primary pb-1 hover:opacity-70 transition-opacity duration-500"
+        href={ctaHref}
+        data-drawer-link
+      >
+        {ctaLabel}
+      </a>
+    </nav>
+    <button
+      class="text-on-surface-variant hover:text-primary transition-colors"
+      aria-label="Close menu"
+      data-drawer-close
+    >
+      <span class="material-symbols-outlined text-[24px]">close</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Drawer toggle logic (runs in browser)
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('[data-drawer-toggle]');
+    const drawer = document.querySelector('[data-drawer]');
+    const links = document.querySelectorAll('[data-drawer-link]');
+    const closeBtn = document.querySelector('[data-drawer-close]');
+
+    if (!toggle || !drawer) return;
+
+    const open = () => {
+      drawer.classList.remove('opacity-0', 'pointer-events-none');
+      drawer.classList.add('opacity-100');
+      document.body.style.overflow = 'hidden';
+      toggle.setAttribute('aria-expanded', 'true');
+    };
+
+    const close = () => {
+      drawer.classList.remove('opacity-100');
+      drawer.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    links.forEach((link) => link.addEventListener('click', close));
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // Close on backdrop click
+    drawer.addEventListener('click', (e) => {
+      if (e.target === drawer) close();
+    });
+  });
+</script>
+
+<style>
+  /* Nav link underline animation */
+  .nav-link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+  .nav-link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-primary);
+    transition: width 300ms ease;
+  }
+  .nav-link-underline:hover::after {
+    width: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link-underline::after {
+      transition: none;
+    }
+  }
+
+  /* Drawer animation */
+  [data-drawer] {
+    transition: opacity 300ms ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-drawer] {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+/**
+ * F03 — Horizontal Booking Bar (Aurelian Gallery).
+ * Full-width, border-y outline-variant/30, bg-surface-container-lowest, py-16.
+ * 4 columns on desktop: Date, Type, Location, Submit.
+ * Inputs: UnderlineInput (label-sm, underline, focus:border-primary).
+ * Submit: BookingCTA primary variant, full-width mobile / auto-width desktop.
+ */
+import UnderlineInput from '../primitives/UnderlineInput.astro';
+import BookingCTA from '../primitives/BookingCTA.astro';
+
+interface Props {
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { ctaLabel = 'Submit Request', ctaHref = '#' } = Astro.props;
+---
+
+<section id="booking" class="border-y border-outline-variant/30 bg-surface-container-lowest py-16" aria-labelledby="booking-bar-title">
+  <div class="container-page">
+    <div class="booking-bar-grid flex flex-col md:flex-row justify-between items-end gap-8">
+      <div class="w-full md:w-1/4">
+        <UnderlineInput
+          id="booking-date"
+          name="date"
+          label="Event Date"
+          placeholder="Select Date"
+          type="date"
+        />
+      </div>
+      <div class="w-full md:w-1/4">
+        <UnderlineInput
+          id="booking-type"
+          name="type"
+          label="Event Type"
+          placeholder="Gala, Private, Corporate"
+        />
+      </div>
+      <div class="w-full md:w-1/4">
+        <UnderlineInput
+          id="booking-location"
+          name="location"
+          label="Location"
+          placeholder="City / Venue"
+        />
+      </div>
+      <div class="w-full md:w-auto booking-bar-submit">
+        <BookingCTA
+          href={ctaHref}
+          label={ctaLabel}
+          variant="primary"
+        />
+      </div>
+    </div>
+  </div>
+</section>

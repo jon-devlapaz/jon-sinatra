@@ -19,8 +19,7 @@ function contrast(a: string, b: string): number {
   return (l1 + 0.05) / (l2 + 0.05);
 }
 
-/** Extract `--name: value;` pairs from the @theme block of theme.css.
- * Values may wrap across lines (prettier), so parse the whole block at once. */
+/** Extract `--name: value;` pairs from the @theme block of theme.css. */
 function parseThemeTokens(source: string): Map<string, string> {
   const tokens = new Map<string, string>();
   const block = source.match(/@theme\s*{([\s\S]*?)}/);
@@ -31,77 +30,105 @@ function parseThemeTokens(source: string): Map<string, string> {
   return tokens;
 }
 
-describe('D01 design tokens (theme.css snapshot)', () => {
-  it('defines the paper/ink/bronze token set', async () => {
+describe('Aurelian Gallery design tokens (theme.css snapshot)', () => {
+  it('defines the Material 3 surface/on-surface/primary/outline token set', async () => {
     const css = await readFile(themeUrl, 'utf8');
     const tokens = parseThemeTokens(css);
     for (const name of [
-      '--color-paper',
-      '--color-paper-deep',
-      '--color-paper-lift',
-      '--color-ink',
-      '--color-ink-soft',
-      '--color-ink-faint',
-      '--color-accent',
-      '--color-accent-deep',
-      '--color-accent-soft',
-      '--color-card',
-      '--color-card-border',
+      '--color-surface',
+      '--color-surface-dim',
+      '--color-surface-bright',
+      '--color-surface-container-lowest',
+      '--color-surface-container-low',
+      '--color-surface-container',
+      '--color-surface-container-high',
+      '--color-surface-container-highest',
+      '--color-on-surface',
+      '--color-on-surface-variant',
+      '--color-outline',
+      '--color-outline-variant',
+      '--color-primary',
+      '--color-on-primary',
+      '--color-primary-container',
+      '--color-on-primary-container',
+      '--color-background',
+      '--color-on-background',
+      '--color-surface-variant',
     ]) {
       expect(tokens.has(name), `missing token ${name}`).toBe(true);
     }
-    expect(tokens.get('--color-paper')).toBe('#f4efe6');
-    expect(tokens.get('--color-ink')).toBe('#2b241b');
-    expect(tokens.get('--color-ink-soft')).toBe('#5d5344');
-    expect(tokens.get('--color-accent')).toBe('#8a5a1b');
-    expect(tokens.get('--color-accent-deep')).toBe('#6f4510');
+    expect(tokens.get('--color-surface')).toBe('#fcf9f8');
+    expect(tokens.get('--color-on-surface')).toBe('#1c1b1b');
+    expect(tokens.get('--color-on-surface-variant')).toBe('#4d4635');
+    expect(tokens.get('--color-primary')).toBe('#735c00');
+    expect(tokens.get('--color-primary-container')).toBe('#d4af37');
   });
 
-  it('defines the Inter type scale and motion/card tokens', async () => {
+  it('defines the Bodoni Moda + DM Sans type scale tokens', async () => {
     const css = await readFile(themeUrl, 'utf8');
     const tokens = parseThemeTokens(css);
-    expect(tokens.get('--font-sans')).toContain('Inter');
-    for (const name of ['--motion-fast', '--radius-card', '--tracking-brand']) {
+    expect(tokens.get('--font-display')).toContain('Bodoni Moda');
+    expect(tokens.get('--font-body')).toContain('DM Sans');
+    expect(tokens.get('--font-label')).toContain('DM Sans');
+    for (const name of [
+      '--text-display-lg',
+      '--text-display-lg-mobile',
+      '--text-headline-md',
+      '--text-subheading-caps',
+      '--text-body-lg',
+      '--text-body-md',
+      '--text-label-sm',
+    ]) {
       expect(tokens.has(name), `missing token ${name}`).toBe(true);
     }
   });
 
-  it('ink/bronze text pairs on paper meet WCAG AA (4.5:1+)', async () => {
+  it('text pairs on surface meet WCAG AA (4.5:1+)', async () => {
     const css = await readFile(themeUrl, 'utf8');
     const tokens = parseThemeTokens(css);
-    const paper = tokens.get('--color-paper');
-    expect(paper).toBeDefined();
+    const surface = tokens.get('--color-surface');
+    expect(surface).toBeDefined();
     for (const name of [
-      '--color-ink',
-      '--color-ink-soft',
-      '--color-accent',
-      '--color-accent-deep',
+      '--color-on-surface',
+      '--color-on-surface-variant',
+      '--color-primary',
     ]) {
       const fg = tokens.get(name);
       expect(fg, `missing token ${name}`).toBeDefined();
-      expect(contrast(fg!, paper!), `${name} vs paper`).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(fg!, surface!), `${name} vs surface`).toBeGreaterThanOrEqual(4.5);
     }
-    // Button pair: paper text on accent fill must also pass AA.
-    const accent = tokens.get('--color-accent')!;
-    expect(contrast(paper!, accent), 'paper vs accent').toBeGreaterThanOrEqual(4.5);
+    // Button pair: on-primary text on primary fill must also pass AA.
+    const primary = tokens.get('--color-primary')!;
+    const onPrimary = tokens.get('--color-on-primary')!;
+    expect(contrast(onPrimary, primary), 'on-primary vs primary').toBeGreaterThanOrEqual(4.5);
   });
 
-  it('exposes card + motion governance tokens', async () => {
+  it('exposes spacing + layout governance tokens', async () => {
     const css = await readFile(themeUrl, 'utf8');
     const tokens = parseThemeTokens(css);
-    expect(tokens.get('--radius-card')).toBeDefined();
-    expect(tokens.get('--motion-fast')).toBeDefined();
-    expect(tokens.get('--shadow-card')).toBeDefined();
+    for (const name of [
+      '--spacing-unit',
+      '--spacing-gutter',
+      '--spacing-margin-desktop',
+      '--spacing-margin-mobile',
+      '--spacing-section-gap',
+      '--container-max',
+      '--hairline-width',
+    ]) {
+      expect(tokens.has(name), `missing token ${name}`).toBe(true);
+    }
+    expect(tokens.get('--spacing-section-gap')).toBe('160px');
+    expect(tokens.get('--container-max')).toBe('1440px');
+    expect(tokens.get('--spacing-margin-desktop')).toBe('80px');
   });
 });
 
-describe('webfont delivery (Inter ships in preview AND production)', () => {
-  it('self-hosts Inter via @fontsource, not a remote Google Fonts import', async () => {
+describe('webfont delivery (Aurelian Gallery ships in preview AND production)', () => {
+  it('self-hosts Bodoni Moda + DM Sans via @fontsource, not remote Google Fonts', async () => {
     const css = await readFile(themeUrl, 'utf8');
     expect(css).not.toContain('fonts.googleapis.com');
-    expect(css).toContain("@import '@fontsource-variable/inter");
-    const tokens = parseThemeTokens(css);
-    expect(tokens.get('--font-sans')).toContain('Inter Variable');
+    expect(css).toContain('@fontsource-variable/bodoni-moda');
+    expect(css).toContain('@fontsource/dm-sans');
   });
 
   it('emits @font-face rules + woff2 assets in the built CSS (real delivery)', async () => {
@@ -114,11 +141,12 @@ describe('webfont delivery (Inter ships in preview AND production)', () => {
     ).join('\n');
 
     expect(bundle).toContain('@font-face');
-    expect(bundle).toContain('Inter Variable');
+    expect(bundle).toContain('Bodoni Moda');
+    expect(bundle).toContain('DM Sans');
     const familyRefs = [...bundle.matchAll(/url\(\/_astro\/([\w.-]+\.woff2)\)/g)]
       .map((m) => m[1])
-      .filter((f) => f.includes('inter'));
-    expect(familyRefs.length, 'no Inter woff2 referenced in built CSS').toBeGreaterThan(0);
+      .filter((f) => f.includes('bodoni') || f.includes('dm-sans'));
+    expect(familyRefs.length, 'no Bodoni/DM Sans woff2 referenced in built CSS').toBeGreaterThan(0);
     for (const asset of familyRefs) {
       expect(distFiles, `missing emitted asset ${asset}`).toContain(asset);
     }

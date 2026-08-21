@@ -1,385 +1,531 @@
 /*
- * D01 — design-system layer (paper/ink/bronze tokens, Inter type, glassy card,
- * pill buttons, dotted texture). Revision replaces the noir/gold lounge theme
- * with the warm-paper minimalist direction Jon specified: a centered glassy
- * card on warm parchment, light sans-serif type, one bronze accent.
+ * D01 — Aurelian Gallery design-system layer (tokens, type, layout, components).
+ * Light luxury: pristine white, soft marble, brushed gold, onyx.
+ * Imported via src/styles/global.css.
  *
- * Type is self-hosted via @fontsource (no remote Google Fonts request): the
- * import below resolves to a local woff2 that Vite emits into dist, so Inter
- * ships in preview AND production builds. @import precedes every other rule
- * so the CSS optimizer keeps it.
+ * Fonts are self-hosted via @fontsource (no remote Google Fonts request):
+ * the imports below resolve to local woff2 files that Vite emits into dist,
+ * so the typefaces ship in preview AND production builds. All @import
+ * statements precede every other rule so the CSS optimizer keeps them.
  */
-@import '@fontsource-variable/inter/index.css';
+@import '@fontsource-variable/bodoni-moda/index.css';
+@import '@fontsource-variable/bodoni-moda/wght-italic.css';
+@import '@fontsource/dm-sans/index.css';
+@import '@fontsource/dm-sans/300.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/600.css';
+@import '@fontsource/dm-sans/700.css';
 @import 'tailwindcss/theme' layer(theme);
 
 @theme {
-  /* Warm parchment + ink ramp. */
-  --color-paper: #f4efe6; /* warm parchment base */
-  --color-paper-deep: #ece3d2; /* deeper paper (header, footer, gradients) */
-  --color-paper-lift: #fbf8f1; /* elevated surfaces on paper */
-  --color-ink: #2b241b; /* primary text — warm near-black */
-  --color-ink-soft: #5d5344; /* secondary text — 6.58:1 on paper */
-  --color-ink-faint: #a89d8c; /* placeholder/hover — never small text */
-  --color-accent: #8a5a1b; /* bronze — 5.15:1 text on paper AND paper on it */
-  --color-accent-deep: #6f4510; /* deep bronze emphasis — 7.23:1 on paper */
-  --color-accent-soft: #c9a66b; /* decoration only (rules, dots) */
+  /* --- Color: Material 3 light luxury palette --- */
+  /* Surface (backgrounds) */
+  --color-surface: #fcf9f8;
+  --color-surface-dim: #dcd9d9;
+  --color-surface-bright: #fcf9f8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3f2;
+  --color-surface-container: #f0eded;
+  --color-surface-container-high: #eae7e7;
+  --color-surface-container-highest: #e5e2e1;
 
-  /* Glassy card surface. */
-  --color-card: rgb(255 253 248 / 0.72);
-  --color-card-strong: rgb(255 253 248 / 0.92); /* inputs */
-  --color-card-border: rgb(80 66 45 / 0.18);
+  /* On-surface (text) */
+  --color-on-surface: #1c1b1b;
+  --color-on-surface-variant: #4d4635;
 
-  /* Type — Inter (variable), light/regular weights. */
-  --font-sans:
-    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
+  /* Outline (hairlines, dividers) */
+  --color-outline: #7f7663;
+  --color-outline-variant: #d0c5af;
 
-  /* Type scale (system sizes, responsive). */
-  --text-hero: clamp(2.5rem, 6vw + 0.75rem, 4rem);
-  --text-display: clamp(1.5rem, 2vw + 0.75rem, 2.25rem);
-  --text-title: clamp(1.125rem, 1vw + 0.75rem, 1.5rem);
-  --text-body: clamp(1rem, 0.4vw + 0.9rem, 1.125rem);
-  --text-label: 0.75rem;
-  --leading-body: 1.6;
+  /* Primary (brushed gold) */
+  --color-primary: #735c00;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #d4af37;
+  --color-on-primary-container: #554300;
+  --color-inverse-primary: #e9c349;
 
-  /* Brand lockup letter-spacing (tight) + motion duration. */
-  --tracking-brand: -0.02em;
-  --motion-fast: 200ms;
+  /* Secondary / Tertiary (neutral) */
+  --color-secondary: #5d5f5f;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dcdddd;
+  --color-on-secondary-container: #5f6161;
+  --color-tertiary: #5d5f5f;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #b2b3b3;
+  --color-on-tertiary-container: #444546;
 
-  /* Card + soft shadows. */
-  --radius-card: 1rem;
-  --shadow-card: 0 20px 45px -18px rgb(80 66 45 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.8);
-  --shadow-soft: 0 6px 18px -10px rgb(80 66 45 / 0.18);
+  /* Error */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
 
-  /* Faint dotted texture grid. */
-  --dot-size: 22px;
+  /* Fixed / dim variants (for hover/active states) */
+  --color-primary-fixed: #ffe088;
+  --color-primary-fixed-dim: #e9c349;
+  --color-on-primary-fixed: #241a00;
+  --color-on-primary-fixed-variant: #574500;
+  --color-secondary-fixed: #e2e2e2;
+  --color-secondary-fixed-dim: #c6c6c7;
+  --color-on-secondary-fixed: #1a1c1c;
+  --color-on-secondary-fixed-variant: #454747;
+  --color-tertiary-fixed: #e2e2e2;
+  --color-tertiary-fixed-dim: #c6c6c6;
+  --color-on-tertiary-fixed: #1a1c1c;
+  --color-on-tertiary-fixed-variant: #454747;
+
+  /* Background aliases */
+  --color-background: #fcf9f8;
+  --color-on-background: #1c1b1b;
+  --color-surface-variant: #e5e2e1;
+
+  /* --- Typography: Bodoni Moda (display) + DM Sans (body/labels) --- */
+  --font-display: 'Bodoni Moda Variable', 'Bodoni Moda', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-label: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* Display / Hero */
+  --text-display-lg: 72px;
+  --leading-display-lg: 80px;
+  --font-weight-display-lg: 200;
+  --tracking-display-lg: -0.02em;
+
+  --text-display-lg-mobile: 48px;
+  --leading-display-lg-mobile: 52px;
+  --font-weight-display-lg-mobile: 200;
+  --tracking-display-lg-mobile: -0.01em;
+
+  /* Footer brand lockup */
+  --text-brand-footer: 48px;
+  --leading-brand-footer: 1.05;
+  --text-brand-footer-mobile: 32px;
+  --leading-brand-footer-mobile: 1.1;
+  --tracking-brand: 0.04em;
+
+  /* Section headlines */
+  --text-headline-md: 32px;
+  --leading-headline-md: 40px;
+  --font-weight-headline-md: 300;
+
+  /* Subheading caps (nav, eyebrows, labels) */
+  --text-subheading-caps: 12px;
+  --leading-subheading-caps: 16px;
+  --font-weight-subheading-caps: 500;
+  --tracking-subheading-caps: 0.3em;
+
+  /* Body */
+  --text-body-lg: 18px;
+  --leading-body-lg: 32px;
+  --font-weight-body-lg: 300;
+
+  --text-body-md: 16px;
+  --leading-body-md: 28px;
+  --font-weight-body-md: 400;
+
+  /* Label / small caps */
+  --text-label-sm: 11px;
+  --leading-label-sm: 14px;
+  --font-weight-label-sm: 600;
+  --tracking-label-sm: 0.1em;
+
+  /* --- Spacing & Layout --- */
+  --spacing-unit: 8px;
+  --spacing-gutter: 32px;
+  --spacing-margin-desktop: 80px;
+  --spacing-margin-mobile: 24px;
+  --spacing-section-gap: 160px;
+  --container-max: 1440px;
+
+  /* --- Border radius: Sharp (0) --- */
+  --radius-none: 0;
+  --radius-full: 9999px;
+
+  /* --- Shadows: None (tonal layering only) --- */
+  /* Intentionally empty — depth via white-on-marble + hairlines */
+
+  /* --- Hairline governance (0.5px minimum) --- */
+  --hairline-width: 0.5px;
+  --hairline-primary: #735c00;
+  --hairline-outline: #d0c5af;
+  --hairline-outline-variant: #d0c5af;
 }
 
 @layer base {
   html {
     color-scheme: light;
-    background-color: var(--color-paper);
+    background-color: var(--color-surface);
   }
   body {
-    background-color: var(--color-paper);
-    /* Warm glow behind the card + a faint dotted texture for depth. */
-    background-image:
-      radial-gradient(60rem 28rem at 50% -6%, rgb(201 166 107 / 0.28), transparent 68%),
-      radial-gradient(rgb(80 66 45 / 0.07) 1px, transparent 1.4px);
-    background-size:
-      100% 100%,
-      var(--dot-size) var(--dot-size);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
-    font-size: var(--text-body);
-    font-weight: 400;
-    line-height: var(--leading-body);
+    background-color: var(--color-surface);
+    color: var(--color-on-background);
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--leading-body-md);
+    font-weight: var(--font-weight-body-md);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
-    background-color: var(--color-accent);
-    color: var(--color-paper);
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
   }
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: var(--hairline-width) solid var(--color-primary);
     outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
-  /* Brand lockup — compact mark + name, tight letter-spacing. */
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--color-ink);
-    text-decoration: none;
+  .main-nav > :first-child {
+    justify-self: start;
   }
-  .brand-name {
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: var(--tracking-brand);
-    color: var(--color-ink);
+  .main-nav > :nth-child(2) {
+    justify-self: center;
+  }
+  .main-nav > :nth-child(3),
+  .main-nav > :nth-child(4) {
+    justify-self: end;
   }
 
-  /* Small uppercase labels (section eyebrows, form labels, facts). */
-  .eyebrow {
-    font-family: var(--font-sans);
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-accent-deep);
+  /* --- Glassmorphism header / nav --- */
+  .glass-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background-color: rgb(252 249 248 / 0.8);
+    backdrop-filter: blur(30px);
+    border-bottom: var(--hairline-width) solid rgb(208 197 175 / 0.3);
   }
 
-  /* Glassy centered card — the site's shell. */
-  .card {
-    background: var(--color-card);
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-card);
-    backdrop-filter: blur(14px) saturate(1.1);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1);
-    box-shadow: var(--shadow-card);
+  /* --- Gallery image filter (desaturated → color on hover) --- */
+  .gallery-img {
+    filter: grayscale(15%) sepia(5%);
+    transition: filter 0.5s ease, transform 700ms cubic-bezier(0.2, 0, 0, 1);
   }
-
-  /* 1px bronze rule (accent underline, dividers). */
-  .rule {
-    height: 1px;
-    background: var(--color-accent-soft);
+  .gallery-img:hover {
+    filter: grayscale(0%) sepia(0%);
   }
-
-  /* Intro / marquee block (centered, no full-bleed). */
-  .marquee {
-    display: grid;
-    gap: 1.25rem;
-    justify-items: center;
-    text-align: center;
+  .hero-image .framed-image {
+    transform: translate(12px, -12px);
   }
-  .marquee-sub {
-    font-family: var(--font-sans);
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-accent-deep);
+  .hero-image .framed-image::after {
+    width: 12px;
+    height: 12px;
   }
-  .marquee-name {
-    font-family: var(--font-sans);
-    font-size: var(--text-hero);
-    font-weight: 300;
-    line-height: 0.98;
-    letter-spacing: var(--tracking-brand);
-    color: var(--color-ink);
-    text-wrap: balance;
+  .hero-image .gallery-img {
+    object-position: 54% 48%;
   }
-
-  /* Key-facts strip (compact, restrained). */
-  .facts-strip {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: 1rem;
+  .hero-image:hover .gallery-img {
+    transform: scale(1.035);
   }
-  .facts-strip dt {
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-accent-deep);
-  }
-  .facts-strip dd {
-    margin: 0;
-    font-size: var(--text-title);
-    font-weight: 500;
-    color: var(--color-ink);
-  }
-
-  /* Media frame (gallery/bio placeholder). */
-  .media-frame {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    background: var(--color-paper-lift);
-    border: 1px solid var(--color-card-border);
-    border-radius: 0.75rem;
-  }
-
-  /* Pill buttons — the primary action family. */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    font-family: var(--font-sans);
-    font-size: var(--text-label);
-    font-weight: 600;
+  .hero-image-caption {
+    margin-top: 8px;
+    padding-left: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    text-decoration: none;
-    color: var(--color-paper);
-    background: var(--color-accent);
-    border: 1px solid transparent;
-    border-radius: 999px;
-    box-shadow: var(--shadow-soft);
-    cursor: pointer;
-    transition:
-      transform var(--motion-fast) ease,
-      background-color var(--motion-fast) ease,
-      color var(--motion-fast) ease,
-      border-color var(--motion-fast) ease,
-      box-shadow var(--motion-fast) ease;
   }
-  .btn:hover {
-    background: var(--color-accent-deep);
-    transform: translateY(-1px);
-  }
-  .btn:active {
-    transform: scale(0.97);
-  }
-  .btn:disabled,
-  .btn[aria-disabled='true'] {
-    background: #d8d2c6;
-    color: var(--color-ink-faint);
-    box-shadow: none;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .btn--ghost {
-    background: transparent;
-    color: var(--color-accent-deep);
-    border-color: var(--color-accent-soft);
-    box-shadow: none;
-  }
-  .btn--ghost:hover {
-    background: rgb(138 90 27 / 0.1);
-    border-color: var(--color-accent);
-  }
-  .btn--link {
-    padding: 0;
-    background: none;
-    border: none;
-    box-shadow: none;
-    color: var(--color-accent-deep);
-    text-transform: none;
-    letter-spacing: 0;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    border-radius: 0;
-  }
-  .btn--link:hover {
-    background: none;
-    color: var(--color-accent);
-    transform: none;
-  }
-  .btn--circle {
-    width: 3.25rem;
-    height: 3.25rem;
-    padding: 0;
-    border-radius: 999px;
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-
-  /* Processing state — subtle scale/contrast dip + spinner. */
-  .btn--processing {
-    opacity: 0.9;
-    transform: scale(0.97);
-  }
-  .btn--processing::after {
-    content: '';
-    width: 0.9em;
-    height: 0.9em;
-    border: 2px solid rgb(244 239 230 / 0.45);
-    border-top-color: var(--color-paper);
-    border-radius: 50%;
-    animation: btn-spin 0.8s linear infinite;
-  }
-  @keyframes btn-spin {
-    to {
-      transform: rotate(360deg);
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-img,
+    .hero-image .gallery-img {
+      transition: none;
     }
   }
 
-  /* Glassy ticket-stub CTA (single column). */
-  .ticket-stub {
-    width: min(100%, 30rem);
-    background: var(--color-card);
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-card);
-    backdrop-filter: blur(10px) saturate(1.1);
-    -webkit-backdrop-filter: blur(10px) saturate(1.1);
-    box-shadow: var(--shadow-soft);
+  /* --- Framed image with corner accents --- */
+  .framed-image {
+    position: relative;
+    border: var(--hairline-width) solid var(--color-primary-container);
   }
-  .ticket-stub__main {
-    display: grid;
-    gap: 0.75rem;
-    padding: 1.5rem 1.75rem;
+  .framed-image::before,
+  .framed-image::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--color-primary-container);
+    border-style: solid;
   }
-  .ticket-stub__title {
-    font-size: var(--text-title);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
+  .framed-image::before {
+    top: calc(var(--hairline-width) * -1);
+    left: calc(var(--hairline-width) * -1);
+    border-top-width: var(--hairline-width);
+    border-left-width: var(--hairline-width);
+    border-right: none;
+    border-bottom: none;
   }
-  .ticket-stub__row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .ticket-stub__status {
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-accent-deep);
-  }
-  .ticket-stub__value {
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-  }
-  .ticket-stub__cta {
-    justify-self: start;
+  .framed-image::after {
+    bottom: calc(var(--hairline-width) * -1);
+    right: calc(var(--hairline-width) * -1);
+    border-bottom-width: var(--hairline-width);
+    border-right-width: var(--hairline-width);
+    border-top: none;
+    border-left: none;
   }
 
-  /* Gatefold card — restyled as the glassy surface (package tiers). */
-  .gatefold {
-    background: var(--color-card);
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-card);
-    backdrop-filter: blur(10px) saturate(1.1);
-    -webkit-backdrop-filter: blur(10px) saturate(1.1);
-    box-shadow: var(--shadow-soft);
-    padding: 1.75rem;
-  }
-  .gatefold__title {
-    font-size: var(--text-title);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
-  }
-
-  /* Minimal inputs — one thin border, no extra chrome. */
-  .input {
-    width: 100%;
-    padding: 0.625rem 0.875rem;
-    font-family: var(--font-sans);
-    font-size: var(--text-body);
-    color: var(--color-ink);
-    background: var(--color-card-strong);
-    border: 1px solid var(--color-card-border);
-    border-radius: 0.625rem;
+  /* --- Underline input (booking bar) --- */
+  .underline-input {
+    background: transparent;
+    border: none;
+    border-bottom: var(--hairline-width) solid var(--color-outline-variant);
     outline: none;
-    transition:
-      border-color var(--motion-fast) ease,
-      box-shadow var(--motion-fast) ease;
+    padding: 8px 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--leading-body-md);
+    color: var(--color-on-surface);
+    width: 100%;
+    transition: border-color 200ms ease;
   }
-  .input::placeholder {
-    color: var(--color-ink-faint);
+  .underline-input::placeholder {
+    color: var(--color-on-surface-variant);
+    opacity: 0.5;
   }
-  .input:focus-visible {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgb(138 90 27 / 0.16);
+  .underline-input:focus {
+    border-bottom-color: var(--color-primary);
   }
-  .input:read-only {
-    color: var(--color-ink-soft);
+  @media (prefers-reduced-motion: reduce) {
+    .underline-input {
+      transition: none;
+    }
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .btn,
-  .input,
-  .card,
-  .ticket-stub,
-  .gatefold {
-    transition: none;
+  /* --- Label for underline inputs --- */
+  .underline-label {
+    display: block;
+    font-family: var(--font-label);
+    font-size: var(--text-label-sm);
+    line-height: var(--leading-label-sm);
+    font-weight: var(--font-weight-label-sm);
+    letter-spacing: var(--tracking-label-sm);
+    text-transform: uppercase;
+    color: var(--color-on-surface-variant);
+    margin-bottom: 8px;
   }
-  .btn:active,
-  .btn--processing {
-    transform: none;
+
+  /* --- Buttons --- */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: var(--hairline-width) solid var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: var(--font-label);
+    font-size: var(--text-subheading-caps);
+    line-height: var(--leading-subheading-caps);
+    font-weight: var(--font-weight-subheading-caps);
+    letter-spacing: var(--tracking-subheading-caps);
+    text-transform: uppercase;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
   }
-  .btn--processing::after {
-    animation: none;
+  .btn-primary:hover {
+    background-color: transparent;
+    color: var(--color-primary);
+  }
+  .btn-primary:active,
+  .btn-ghost:active,
+  .btn-underline:active {
+    transform: scale(0.96);
+  }
+  .btn-primary:disabled,
+  .btn-ghost:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-primary:focus-visible {
+    outline: var(--hairline-width) solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: var(--hairline-width) solid var(--color-primary);
+    background-color: transparent;
+    color: var(--color-primary);
+    font-family: var(--font-label);
+    font-size: var(--text-subheading-caps);
+    line-height: var(--leading-subheading-caps);
+    font-weight: var(--font-weight-subheading-caps);
+    letter-spacing: var(--tracking-subheading-caps);
+    text-transform: uppercase;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+  .btn-ghost:hover {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .btn-ghost:focus-visible {
+    outline: var(--hairline-width) solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .btn-underline {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-family: var(--font-label);
+    font-size: var(--text-subheading-caps);
+    line-height: var(--leading-subheading-caps);
+    font-weight: var(--font-weight-subheading-caps);
+    letter-spacing: var(--tracking-subheading-caps);
+    text-transform: uppercase;
+    padding: 8px 0;
+    border-bottom: var(--hairline-width) solid var(--color-primary);
+    cursor: pointer;
+    transition: color 200ms ease, border-color 200ms ease, gap 200ms ease;
+  }
+  .btn-underline:hover {
+    color: var(--color-on-surface);
+    border-bottom-color: var(--color-on-surface);
+    gap: 8px;
+  }
+  .btn-underline:focus-visible {
+    outline: var(--hairline-width) solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary,
+    .btn-ghost,
+    .btn-underline {
+      transition: none;
+    }
+  }
+
+  /* --- White card on marble (tonal layering) --- */
+  .card-white {
+    background-color: var(--color-surface-container-lowest);
+    border: var(--hairline-width) solid var(--color-outline-variant);
+    border-radius: var(--radius-none);
+  }
+
+  /* --- Marble container background --- */
+  .bg-marble {
+    background-color: var(--color-surface-container-low);
+  }
+
+  /* --- Section divider --- */
+  .section-divider {
+    border-top: var(--hairline-width) solid var(--color-outline-variant);
+  }
+
+  .about-title {
+    max-width: 12ch;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  /* --- Utility: container with responsive margins --- */
+  .container-page {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-margin-mobile);
+    padding-right: var(--spacing-margin-mobile);
+  }
+  @media (min-width: 768px) {
+    .container-page {
+      padding-left: var(--spacing-margin-desktop);
+      padding-right: var(--spacing-margin-desktop);
+    }
+  }
+
+  /* --- Utility: section vertical rhythm --- */
+  .section-gap {
+    padding-block: clamp(96px, 12vw, var(--spacing-section-gap));
+  }
+
+  /* --- Utility: grid for hero --- */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-gutter);
+  }
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: repeat(12, 1fr);
+    }
+  }
+  .hero-text {
+    @media (min-width: 768px) {
+      grid-column: span 7;
+    }
+  }
+  .hero-image {
+    @media (min-width: 768px) {
+      grid-column: span 5;
+      margin-left: -48px; /* -ml-12 equivalent */
+    }
+  }
+
+  /* --- Booking bar grid --- */
+  .booking-bar-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-gutter);
+  }
+  @media (min-width: 768px) {
+    .booking-bar-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .booking-bar-submit {
+    @media (min-width: 768px) {
+      width: auto;
+    }
+  }
+
+  /* --- Footer grid --- */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      row-gap: 48px;
+      text-align: left;
+    }
+    .footer-grid > :first-child {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+    .footer-grid > nav {
+      justify-self: start;
+    }
+    .footer-grid > :last-child {
+      justify-self: end;
+      max-width: 220px;
+    }
   }
 }

@@ -1,31 +1,32 @@
 ---
 /**
- * F08 — The Booking (LG3).
- * The React island hydrates the SSR form for inline validation, pending/
- * success/error states and endpoint delivery. Without JS the SSR `<form>`
- * still posts to the configured endpoint (mailto: by default).
- *
- * FORM_ENDPOINT is read at build time from `PUBLIC_FORM_ENDPOINT` (Astro env),
- * per the roadmap's endpoint-agnostic adapter default; unset → mailto handoff.
+ * F04 — Booking Shell (LG3 React island mount).
+ * Mounts the BookingForm island for progressive enhancement.
+ * The static BookingBar above handles the primary horizontal form.
+ * This shell provides the detailed form experience (validation, states, endpoint delivery).
  */
 import type { Profile } from '../../data/profile';
 import BookingForm from '../booking/BookingForm';
 
 interface Props {
   profile: Profile;
+  packageId?: string;
+  date?: string;
 }
 
 const { profile } = Astro.props;
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
-const packages = profile.packages.map((p) => ({ id: p.id, eyebrow: p.eyebrow }));
+const packages = profile.packages?.map((p) => ({ id: p.id, eyebrow: p.eyebrow })) || [];
 ---
 
-<section id="booking" class="py-24" aria-labelledby="booking-title">
+<div class="container-page py-section-gap" id="booking-form-shell" aria-labelledby="booking-form-title">
   <div class="mx-auto max-w-2xl">
-    <p class="eyebrow" id="booking-eyebrow">The Booking</p>
-    <h2 class="text-display text-ink" id="booking-title">Set the date</h2>
-    <p class="mt-4 max-w-2xl text-ink-soft">
-      A note, a date, a package — I'll get back within 24 hours. (No spam; ever.)
+    <p class="font-label text-subheading-caps text-primary" id="booking-form-eyebrow">Let’s talk about it</p>
+    <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface" id="booking-form-title">
+      Tell me what you’re planning
+    </h2>
+    <p class="mt-4 max-w-2xl text-on-surface-variant font-light leading-loose">
+      Tell me the date, the kind of event, and what you have in mind. I’ll get back to you as soon as I can.
     </p>
 
     <BookingForm
@@ -35,4 +36,4 @@ const packages = profile.packages.map((p) => ({ id: p.id, eyebrow: p.eyebrow }))
       packages={packages}
     />
   </div>
-</section>
+</div>

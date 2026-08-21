@@ -24,19 +24,19 @@ test.describe('LG3 booking flow', () => {
 
     await page.locator('a[href="#booking?package=standard"]').first().click();
     const packageInput = page.getByLabel('Package');
-    await expect(packageInput).toHaveValue('The Standard');
+    await expect(packageInput).toHaveValue('A full evening');
 
     await page.getByLabel('Name').fill('Avery Booker');
     await page.getByLabel('Email').fill('avery@example.com');
     await page.getByLabel('Event date').fill('2026-12-20');
-    await page.getByRole('button', { name: /send the booking/i }).click();
+    await page.getByRole('button', { name: /send my note/i }).click();
 
-    await expect(page.getByText(/date is pencilled in/i)).toBeVisible();
+    await expect(page.getByText(/thanks, i received your note/i)).toBeVisible();
   });
 
   test('invalid submissions stay on the form with inline errors', async ({ page }) => {
     await waitForHydration(page);
-    await page.getByRole('button', { name: /send the booking/i }).click();
+    await page.getByRole('button', { name: /send my note/i }).click();
     await expect(page.getByText(/please add your name/i)).toBeVisible();
     await expect(page.getByText(/add an email/i)).toBeVisible();
     const name = page.getByLabel('Name');
@@ -58,11 +58,11 @@ test.describe('LG3 booking flow', () => {
     await page.getByLabel('Email').fill('avery@example.com');
     await page.getByLabel('Event date').fill('2026-12-20');
 
-    const submit = page.getByRole('button', { name: /send the booking/i });
+    const submit = page.getByRole('button', { name: /send my note/i });
     await submit.click();
     await expect(page.getByText(/didn't go through/i)).toBeVisible();
 
     await submit.click();
-    await expect(page.getByText(/date is pencilled in/i)).toBeVisible();
+    await expect(page.getByText(/thanks, i received your note/i)).toBeVisible();
   });
 });

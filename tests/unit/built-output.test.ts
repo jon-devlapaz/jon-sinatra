@@ -20,12 +20,18 @@ describe('built home page ships styling', () => {
     expect(existsSync(cssPath), `stylesheet ${href} missing from dist/`).toBe(true);
   });
 
-  it('the built stylesheet declares the paper/ink design tokens', () => {
+  it('the built stylesheet declares the Aurelian Gallery design tokens', () => {
     const html = readFileSync(distIndex, 'utf8');
     const href = html.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
     const css = readFileSync(resolve(process.cwd(), `dist/${href!.replace(/^\/+/, '')}`), 'utf8');
-    expect(css).toContain('--color-paper');
-    expect(css).toContain('--color-accent');
-    expect(css).toContain('--font-sans');
+    // Material 3 surface tokens.
+    expect(css).toContain('--color-surface');
+    expect(css).toContain('--color-on-surface');
+    expect(css).toContain('--color-primary');
+    expect(css).toContain('--color-primary-container');
+    expect(css).toContain('--color-outline-variant');
+    // Typography tokens.
+    expect(css).toContain('--text-display-lg');
+    expect(css).toContain('--text-headline-md');
   });
 });

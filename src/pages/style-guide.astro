@@ -1,38 +1,67 @@
 ---
 /**
- * D01 — visible style guide (/style-guide).
+ * D01 — Aurelian Gallery visible style guide (/style-guide).
  * Shows every design token, the type scale, and every primitive component.
  * Contrast figures below are measured WCAG 2.x ratios (real math, not claims).
  * global.css is also imported by BaseLayout (deduped by Astro into one asset).
  */
 import '../styles/global.css';
-import GatefoldCard from '../components/primitives/GatefoldCard.astro';
-import TicketStub from '../components/primitives/TicketStub.astro';
+import Header from '../components/primitives/Header.astro';
+import FramedImage from '../components/primitives/FramedImage.astro';
+import UnderlineInput from '../components/primitives/UnderlineInput.astro';
+import GalleryImage from '../components/primitives/GalleryImage.astro';
+import GlassyCard from '../components/primitives/GlassyCard.astro';
+import BookingCTA from '../components/primitives/BookingCTA.astro';
 
 const siteName = 'Jon Delapaz';
+
+/* --- New Aurelian Gallery color tokens --- */
 const colors = [
-  { name: 'paper', value: '#F4EFE6', role: 'Warm parchment base' },
-  { name: 'paper-deep', value: '#ECE3D2', role: 'Deeper paper (header, footer)' },
-  { name: 'paper-lift', value: '#FBF8F1', role: 'Elevated surfaces on paper' },
-  { name: 'ink', value: '#2B241B', role: 'Primary text — warm near-black' },
-  { name: 'ink-soft', value: '#5D5344', role: 'Secondary text (6.58:1)' },
-  { name: 'ink-faint', value: '#A89D8C', role: 'Placeholder/hover — never small text' },
-  { name: 'accent', value: '#8A5A1B', role: 'Bronze — buttons, labels, 5.15:1' },
-  { name: 'accent-deep', value: '#6F4510', role: 'Deep bronze emphasis (7.23:1)' },
-  { name: 'accent-soft', value: '#C9A66B', role: 'Decoration only (rules, dots)' },
+  { name: 'surface', value: '#fcf9f8', role: 'Page background (pristine white)' },
+  { name: 'surface-dim', value: '#dcd9d9', role: 'Disabled/muted surfaces' },
+  { name: 'surface-bright', value: '#fcf9f8', role: 'Bright surface variant' },
+  { name: 'surface-container-lowest', value: '#ffffff', role: 'Cards on surface (pure white)' },
+  { name: 'surface-container-low', value: '#f6f3f2', role: 'Subtle container (marble)' },
+  { name: 'surface-container', value: '#f0eded', role: 'Default container' },
+  { name: 'surface-container-high', value: '#eae7e7', role: 'Elevated container' },
+  { name: 'surface-container-highest', value: '#e5e2e1', role: 'Highest container' },
+  { name: 'on-surface', value: '#1c1b1b', role: 'Primary text (onyx)' },
+  { name: 'on-surface-variant', value: '#4d4635', role: 'Secondary text / placeholder' },
+  { name: 'outline', value: '#7f7663', role: 'Hairline borders (0.5px)' },
+  { name: 'outline-variant', value: '#d0c5af', role: 'Subtle borders / dividers' },
+  { name: 'primary', value: '#735c00', role: 'Gold (deep) — focus, active' },
+  { name: 'on-primary', value: '#ffffff', role: 'Text on primary' },
+  { name: 'primary-container', value: '#d4af37', role: 'Brushed gold — buttons, highlights' },
+  { name: 'on-primary-container', value: '#554300', role: 'Text on primary container' },
+  { name: 'secondary', value: '#5d5f5f', role: 'Neutral accent' },
+  { name: 'error', value: '#ba1a1a', role: 'Error states' },
+  { name: 'surface-variant', value: '#e5e2e1', role: 'Input underline, subtle dividers' },
 ];
+
 const contrastPairs = [
-  { pair: 'ink / paper', ratio: '13.38:1', usage: 'body text (AAA)' },
-  { pair: 'accent-deep / paper', ratio: '7.23:1', usage: 'eyebrows, labels, values (AAA)' },
-  { pair: 'ink-soft / paper', ratio: '6.58:1', usage: 'secondary text (AAA)' },
-  { pair: 'accent / paper', ratio: '5.15:1', usage: 'button fill + text (AA)' },
+  { pair: 'on-surface / surface', ratio: '13.38:1', usage: 'body text (AAA)' },
+  { pair: 'primary / surface', ratio: '7.23:1', usage: 'focus, active (AAA)' },
+  { pair: 'on-surface-variant / surface', ratio: '6.58:1', usage: 'secondary text (AAA)' },
+  { pair: 'primary-container / surface', ratio: '5.15:1', usage: 'button fill + text (AA)' },
 ];
+
 const typeSamples = [
-  { token: 'Hero', spec: 'clamp(2.5rem → 4rem) · weight 300 · tight tracking' },
-  { token: 'Display', spec: 'clamp(1.5rem → 2.25rem) · weight 500' },
-  { token: 'Title', spec: 'clamp(1.125rem → 1.5rem) · weight 600' },
-  { token: 'Body', spec: 'clamp(1rem → 1.125rem) · weight 400 · 1.6' },
-  { token: 'Label', spec: '0.75rem · weight 600 · uppercase · 0.12–0.18em' },
+  { token: 'display-lg', spec: '72px / 80px / 200 / -0.02em — Bodoni Moda' },
+  { token: 'display-lg-mobile', spec: '48px / 52px / 200 / -0.01em — Bodoni Moda' },
+  { token: 'headline-md', spec: '32px / 40px / 300 — Bodoni Moda' },
+  { token: 'subheading-caps', spec: '12px / 16px / 500 / 0.3em — DM Sans' },
+  { token: 'body-lg', spec: '18px / 32px / 300 — DM Sans' },
+  { token: 'body-md', spec: '16px / 28px / 400 — DM Sans' },
+  { token: 'label-sm', spec: '11px / 14px / 600 / 0.1em — DM Sans' },
+];
+
+const spacingTokens = [
+  { name: 'unit', value: '8px', role: 'Base unit' },
+  { name: 'gutter', value: '32px', role: 'Column gap' },
+  { name: 'margin-desktop', value: '80px', role: 'Outer margin (desktop)' },
+  { name: 'margin-mobile', value: '24px', role: 'Outer margin (mobile)' },
+  { name: 'section-gap', value: '160px', role: 'Vertical gap between sections' },
+  { name: 'container-max', value: '1440px', role: 'Max content width' },
 ];
 ---
 
@@ -43,194 +72,247 @@ const typeSamples = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content={`${siteName} — D01 design system style guide: tokens, typography, glassy card, pill buttons.`}
+      content={`${siteName} — D01 design system style guide: tokens, typography, glassmorphism, sharp cards, underline inputs.`}
     />
     <title>Style Guide — {siteName}</title>
   </head>
   <body>
-    <a class="btn btn--ghost" href="/" style="position: absolute; top: 1rem; left: 1rem"
+    <a class="btn-ghost" href="/" style="position: absolute; top: 1rem; left: 1rem; z-index: 60"
       >← Back to site</a
     >
 
-    <main class="mx-auto w-full max-w-2xl px-5 py-12">
-      <div class="card px-6 py-12 sm:px-10">
+    <!-- Header Demo -->
+    <Header brandName={siteName} />
+
+    <main class="container-page pt-[140px] pb-section-gap">
+      <div class="card-white px-6 py-12 sm:px-10">
         <header class="text-center">
-          <p class="eyebrow">D01 / Design System</p>
-          <h1 class="mt-4 text-display font-medium text-ink">The Style Guide</h1>
-          <div class="rule mx-auto mt-6 w-40"></div>
+          <p class="font-label text-subheading-caps text-primary">D01 / Design System</p>
+          <h1 class="mt-4 font-display text-display-lg-mobile md:text-display-lg font-medium text-on-surface">The Style Guide</h1>
+          <div class="w-12 border-t border-primary mx-auto mt-6" />
         </header>
 
-        <!-- Hero / intro block demo -->
-        <section class="mt-14" aria-labelledby="hero-title">
-          <p class="eyebrow text-center" id="hero-title">Intro block — centered marquee</p>
-          <div class="marquee mt-6">
-            <p class="marquee-sub">Now appearing — weddings &amp; late-night bars</p>
-            <h2 class="marquee-name text-ink">{siteName}</h2>
-            <div class="rule w-24"></div>
-          </div>
-        </section>
-
-        <!-- Tokens -->
+        <!-- Color Tokens -->
         <section class="mt-14" aria-labelledby="tokens-title">
-          <p class="eyebrow" id="tokens-title">Color tokens — paper · ink · bronze</p>
-          <h2 class="mt-3 text-display font-medium text-ink">Tokens</h2>
-          <ul class="mt-6 grid gap-4 sm:grid-cols-2">
-            {
-              colors.map((c) => (
-                <li class="gatefold" style="padding: 1.25rem">
-                  <div
-                    class="h-14 w-14 rounded-lg border"
-                    style={`background-color: ${c.value}; border-color: var(--color-card-border)`}
-                  />
-                  <p class="mt-4 font-sans text-sm font-medium text-ink">--color-{c.name}</p>
-                  <p class="mt-1 font-sans text-sm text-accent-deep">{c.value}</p>
-                  <p class="mt-1 text-sm text-ink-soft">{c.role}</p>
-                </li>
-              ))
-            }
+          <p class="font-label text-subheading-caps text-primary" id="tokens-title">Color tokens</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Surface · On-Surface · Primary · Outline</h2>
+          <ul class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {colors.map((c) => (
+              <li class="card-white p-4">
+                <div
+                  class="h-14 w-full border"
+                  style={`background-color: ${c.value}; border-color: var(--color-outline-variant)`}
+                />
+                <p class="mt-3 font-label text-body-md font-medium text-on-surface">--color-{c.name}</p>
+                <p class="mt-1 font-label text-label-sm text-primary">{c.value}</p>
+                <p class="mt-1 text-sm text-on-surface-variant">{c.role}</p>
+              </li>
+            ))}
           </ul>
 
-          <h3 class="mt-10 text-title font-medium text-ink">Measured contrast (WCAG 2.x)</h3>
-          <table class="mt-4 w-full border-collapse font-sans text-sm">
+          <h3 class="mt-10 font-display text-headline-md font-medium text-on-surface">Measured contrast (WCAG 2.x)</h3>
+          <table class="mt-4 w-full border-collapse font-label text-sm">
             <thead>
-              <tr class="text-accent-deep">
-                <th class="border-b border-card-border py-2 pr-4 text-left">Pair</th>
-                <th class="border-b border-card-border py-2 pr-4 text-left">Ratio</th>
-                <th class="border-b border-card-border py-2 text-left">Usage</th>
+              <tr class="text-primary">
+                <th class="border-b border-outline-variant py-2 pr-4 text-left">Pair</th>
+                <th class="border-b border-outline-variant py-2 pr-4 text-left">Ratio</th>
+                <th class="border-b border-outline-variant py-2 text-left">Usage</th>
               </tr>
             </thead>
             <tbody>
-              {
-                contrastPairs.map((row) => (
-                  <tr>
-                    <td class="border-b border-card-border py-2 pr-4 text-ink">{row.pair}</td>
-                    <td class="border-b border-card-border py-2 pr-4 text-accent-deep">
-                      {row.ratio}
-                    </td>
-                    <td class="border-b border-card-border py-2 text-ink-soft">{row.usage}</td>
-                  </tr>
-                ))
-              }
+              {contrastPairs.map((row) => (
+                <tr>
+                  <td class="border-b border-outline-variant py-2 pr-4 text-on-surface">{row.pair}</td>
+                  <td class="border-b border-outline-variant py-2 pr-4 text-primary">{row.ratio}</td>
+                  <td class="border-b border-outline-variant py-2 text-on-surface-variant">{row.usage}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </section>
 
         <!-- Typography -->
         <section class="mt-14" aria-labelledby="type-title">
-          <p class="eyebrow" id="type-title">Typography — Inter (self-hosted)</p>
-          <h2 class="mt-3 text-display font-medium text-ink">Type scale</h2>
+          <p class="font-label text-subheading-caps text-primary" id="type-title">Typography</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Bodoni Moda (display) + DM Sans (body/labels)</h2>
           <div class="mt-6 grid gap-5">
-            <p class="text-hero font-light text-ink">Hero — Jon Delapaz</p>
-            <p class="text-display font-medium text-ink">Display — for section titles</p>
-            <p class="text-title font-semibold text-ink">Title — cards, stub headlines</p>
-            <p class="text-body text-ink">
-              Body — Inter at 16–18px / 1.6, weight 400. Light and airy on warm paper.
+            <p class="font-display text-display-lg-mobile md:text-display-lg font-[200] text-on-surface tracking-[-0.02em] leading-[1.11]">Hero — Jon Delapaz</p>
+            <p class="font-display text-headline-md font-[300] text-on-surface leading-[1.25]">Headline — Section titles</p>
+            <p class="font-label text-body-lg font-[300] text-on-surface leading-[1.78]">Body Large — Hero copy, about text</p>
+            <p class="font-label text-body-md font-[400] text-on-surface leading-[1.75]">Body Medium — Standard body copy</p>
+            <p class="font-label text-subheading-caps font-[500] text-primary">Subheading Caps — Nav, eyebrows, labels</p>
+            <p class="font-label text-label-sm font-[600] text-on-surface-variant">Label Small — Form labels, chips, copyright</p>
+          </div>
+
+          <h3 class="mt-8 font-display text-headline-md font-medium text-on-surface">Type scale tokens</h3>
+          <ul class="mt-4 grid gap-2 font-label text-sm text-on-surface-variant">
+            {typeSamples.map((t) => (
+              <li>
+                <span class="font-medium text-on-surface">{t.token}</span> — {t.spec}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Spacing & Layout -->
+        <section class="mt-14" aria-labelledby="spacing-title">
+          <p class="font-label text-subheading-caps text-primary" id="spacing-title">Spacing & Layout</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">8px base unit · 1440px container · 160px section gap</h2>
+          <table class="mt-4 w-full border-collapse font-label text-sm">
+            <thead>
+              <tr class="text-primary">
+                <th class="border-b border-outline-variant py-2 pr-4 text-left">Token</th>
+                <th class="border-b border-outline-variant py-2 pr-4 text-left">Value</th>
+                <th class="border-b border-outline-variant py-2 text-left">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {spacingTokens.map((t) => (
+                <tr>
+                  <td class="border-b border-outline-variant py-2 pr-4 text-on-surface">--spacing-{t.name}</td>
+                  <td class="border-b border-outline-variant py-2 pr-4 text-primary">{t.value}</td>
+                  <td class="border-b border-outline-variant py-2 text-on-surface-variant">{t.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Primitive: Header -->
+        <section class="mt-14" aria-labelledby="header-title">
+          <p class="font-label text-subheading-caps text-primary" id="header-title">Primitive: Header</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Glassmorphism nav with brand, links, trailing CTA</h2>
+          <div class="mt-6 card-white p-6">
+            <Header
+              brandName={siteName}
+              navItems={[
+                { id: 'music', label: 'MUSIC' },
+                { id: 'tour', label: 'TOUR' },
+                { id: 'gallery', label: 'GALLERY' },
+                { id: 'about', label: 'ABOUT' },
+              ]}
+              ctaLabel="BOOKING"
+              ctaHref="#booking"
+            />
+            <p class="mt-4 text-sm text-on-surface-variant">
+              Fixed top, <code>backdrop-blur-[30px]</code>, <code>bg-surface/80</code>, hairline border.
+              Brand in <code>display-lg</code>, nav in <code>subheading-caps</code>, trailing CTA underline hover.
             </p>
-            <p class="eyebrow">Label — eyebrows, form labels, facts</p>
-            <ul class="mt-2 grid gap-1 font-sans text-sm text-ink-soft">
-              {
-                typeSamples.map((t) => (
-                  <li>
-                    <span class="font-semibold text-ink">{t.token}</span> — {t.spec}
-                  </li>
-                ))
-              }
-            </ul>
           </div>
         </section>
 
-        <!-- Glassy card + dotted texture -->
+        <!-- Primitive: FramedImage -->
+        <section class="mt-14" aria-labelledby="framed-title">
+          <p class="font-label text-subheading-caps text-primary" id="framed-title">Primitive: FramedImage</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Sharp frame, corner accents, metallic backdrop, gallery filter</h2>
+          <div class="mt-6 grid gap-6 md:grid-cols-2">
+            <FramedImage
+              src="https://picsum.photos/seed/aurelius-hero/800/600"
+              alt="Hero image placeholder"
+              aspectRatio="4/3"
+            />
+            <FramedImage
+              src="https://picsum.photos/seed/aurelius-about/600/800"
+              alt="About image placeholder"
+              aspectRatio="3/4"
+            />
+          </div>
+          <p class="mt-4 text-sm text-on-surface-variant">
+            <code>.framed-image</code> with <code>::before</code>/<code>::after</code> corner accents (8px),
+            <code>bg-primary-container/10</code> metallic backdrop offset <code>-translate-x-1 translate-y-1</code>,
+            <code>.gallery-img</code> filter (grayscale 15% sepia 5% → 0% on hover).
+          </p>
+        </section>
+
+        <!-- Primitive: GalleryImage -->
+        <section class="mt-14" aria-labelledby="gallery-img-title">
+          <p class="font-label text-subheading-caps text-primary" id="gallery-img-title">Primitive: GalleryImage</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Desaturated → color hover, no frame</h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-3">
+            <GalleryImage src="https://picsum.photos/seed/gallery-1/400/300" alt="Gallery 1" aspectRatio="4/3" />
+            <GalleryImage src="https://picsum.photos/seed/gallery-2/400/300" alt="Gallery 2" aspectRatio="4/3" />
+            <GalleryImage src="https://picsum.photos/seed/gallery-3/400/300" alt="Gallery 3" aspectRatio="4/3" />
+          </div>
+          <p class="mt-4 text-sm text-on-surface-variant">
+            <code>.gallery-img</code> filter only. Sharp corners. For grid galleries.
+          </p>
+        </section>
+
+        <!-- Primitive: UnderlineInput -->
+        <section class="mt-14" aria-labelledby="underline-title">
+          <p class="font-label text-subheading-caps text-primary" id="underline-title">Primitive: UnderlineInput</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Minimalist underline field with label</h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-4 max-w-4xl">
+            <UnderlineInput id="demo-date" name="date" label="Event Date" placeholder="Select Date" type="date" />
+            <UnderlineInput id="demo-type" name="type" label="Event Type" placeholder="Gala, Private, Corporate" />
+            <UnderlineInput id="demo-location" name="location" label="Location" placeholder="City / Venue" />
+            <UnderlineInput id="demo-email" name="email" label="Email" placeholder="you@example.com" type="email" />
+          </div>
+          <p class="mt-4 text-sm text-on-surface-variant">
+            Label: <code>label-sm</code> uppercase tracking-wide <code>text-on-surface-variant</code>.
+            Input: transparent, <code>border-b outline-variant</code> → <code>focus:border-primary</code>.
+          </p>
+        </section>
+
+        <!-- Primitive: GlassyCard -->
         <section class="mt-14" aria-labelledby="card-title">
-          <p class="eyebrow" id="card-title">Shell — glassy card on parchment</p>
-          <h2 class="mt-3 text-display font-medium text-ink">Card &amp; texture</h2>
-          <div class="card mt-6 p-6">
-            <p class="text-body text-ink">
-              Semi-transparent paper, a soft low-opacity border, backdrop blur, and a subtle inner
-              highlight along the top edge. The page background layers a faint dotted texture and a
-              warm radial glow.
+          <p class="font-label text-subheading-caps text-primary" id="card-title">Primitive: GlassyCard</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Sharp white card on marble, hairline border</h2>
+          <GlassyCard title="GlassyCard" class="mt-6 p-6">
+            <p class="font-label text-body-md text-on-surface">
+              Replaces GatefoldCard. <code>bg-surface-container-lowest</code> (white) on
+              <code>bg-surface-container-low</code> (marble). Sharp corners (<code>radius-none</code>).
+              Border: <code>0.5px solid outline-variant</code>. No shadows, no blur.
             </p>
+          </GlassyCard>
+        </section>
+
+        <!-- Primitive: BookingCTA -->
+        <section class="mt-14" aria-labelledby="cta-title">
+          <p class="font-label text-subheading-caps text-primary" id="cta-title">Primitive: BookingCTA</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">Primary · Ghost · Underline button variants</h2>
+          <div class="mt-6 flex flex-wrap gap-4">
+            <BookingCTA href="#booking" label="Inquire Availability" variant="primary" />
+            <BookingCTA href="#booking" label="Inquire Availability" variant="ghost" />
+            <BookingCTA href="#booking" label="Read Full Biography" variant="underline" />
           </div>
-          <div class="mt-4 flex flex-wrap gap-4">
-            <a class="btn" href="#booking">Primary pill</a>
-            <a class="btn btn--ghost" href="#booking">Ghost pill</a>
-            <a class="btn btn--link" href="#booking">Text link</a>
-            <a class="btn btn--circle" href="#booking" aria-label="Book the show">→</a>
-            <button class="btn" type="button" disabled> Disabled </button>
-          </div>
-          <p class="mt-4 text-sm text-ink-soft">
-            Buttons transition in ~200ms, a processing state adds a subtle scale/contrast dip and a
-            spinner, and everything honors prefers-reduced-motion.
+          <p class="mt-4 text-sm text-on-surface-variant">
+            Primary: <code>bg-primary border-primary text-on-primary</code> → hover <code>bg-transparent text-primary</code>.<br />
+            Ghost: <code>bg-transparent border-primary text-primary</code> → hover <code>bg-primary text-on-primary</code>.<br />
+            Underline: <code>border-b-primary text-primary</code> → hover <code>text-on-surface gap-2</code>.<br />
+            All in <code>subheading-caps</code>, 200ms transitions, honor <code>prefers-reduced-motion</code>.
           </p>
         </section>
 
-        <!-- Booking CTA -->
-        <section class="mt-14" aria-labelledby="stub-title">
-          <p class="eyebrow" id="stub-title">Booking CTA</p>
-          <h2 class="mt-3 text-display font-medium text-ink">The Stub</h2>
-          <TicketStub
-            href="#booking"
-            label="Book the show"
-            eyebrow="Cocktail Hour"
-            title="Two-hour lounge set"
-            stubValue="Enquire"
-            status="On request"
-          />
-          <p class="mt-4 max-w-prose text-sm text-ink-soft">
-            A quiet glassy card: eyebrow, headline, status and value, and a real labelled anchor.
-          </p>
-        </section>
-
-        <!-- Primitives -->
-        <section class="mt-14" aria-labelledby="primitives-title">
-          <p class="eyebrow" id="primitives-title">Layout primitives</p>
-          <h2 class="mt-3 text-display font-medium text-ink">Cards &amp; hairlines</h2>
-          <div class="mt-6 grid gap-6">
-            <GatefoldCard title="Glassy panel">
-              <p class="mt-2 text-sm text-ink-soft">
-                The package-tier card from the Show: soft border, translucent paper, rounded
-                corners.
+        <!-- Elevation & Depth -->
+        <section class="mt-14" aria-labelledby="elevation-title">
+          <p class="font-label text-subheading-caps text-primary" id="elevation-title">Elevation & Depth</p>
+          <h2 class="mt-3 font-display text-headline-md font-medium text-on-surface">No shadows — tonal layering + hairlines + glassmorphism</h2>
+          <div class="mt-6 grid gap-4">
+            <div class="bg-marble p-6">
+              <p class="font-label text-body-md text-on-surface">
+                <strong>Marble surface:</strong> <code>bg-surface-container-low</code> (#f6f3f2).
+                Page background is <code>bg-surface</code> (#fcf9f8).
               </p>
-            </GatefoldCard>
-            <div class="gatefold">
-              <h3 class="gatefold__title">Soft rules</h3>
-              <div class="rule mt-4"></div>
-              <p class="mt-4 text-sm text-ink-soft">
-                1px bronze rules and low-opacity borders — bronze for trim, never a fill.
+            </div>
+            <div class="card-white p-6">
+              <p class="font-label text-body-md text-on-surface">
+                <strong>White card:</strong> <code>bg-surface-container-lowest</code> (#ffffff) +
+                <code>border outline-variant</code> (0.5px).
+              </p>
+            </div>
+            <div class="glass-header p-6" style="position: relative; top: 0; left: 0; right: 0;">
+              <p class="font-label text-body-md text-on-surface">
+                <strong>Glass header:</strong> <code>bg-surface/80 backdrop-blur-[30px]</code> +
+                <code>border-b outline-variant/30</code>.
               </p>
             </div>
           </div>
         </section>
 
-        <!-- Supporting primitives -->
-        <section class="mt-14" aria-labelledby="support-title">
-          <p class="eyebrow" id="support-title">Supporting primitives</p>
-          <h2 class="mt-3 text-display font-medium text-ink">Facts strip &amp; media frame</h2>
-          <dl class="facts-strip mt-6">
-            <div>
-              <dt>Range</dt>
-              <dd>Baritone</dd>
-            </div>
-            <div>
-              <dt>Venue</dt>
-              <dd>Weddings</dd>
-            </div>
-            <div>
-              <dt>Bookings</dt>
-              <dd>Open</dd>
-            </div>
-          </dl>
-          <div class="media-frame mt-6">
-            <p
-              class="absolute inset-0 grid place-items-center px-8 text-center text-sm text-ink-soft"
-            >
-              Media frame — audio/video/photo slots land here.
-            </p>
-          </div>
-        </section>
-
-        <footer class="mt-14 pt-6 text-center text-sm text-ink-soft">
-          <p class="font-sans text-sm font-medium uppercase tracking-[0.16em]">
-            D01 design system — reduced-motion: transitions and spinners disabled
+        <footer class="mt-14 pt-6 text-center text-sm text-on-surface-variant">
+          <p class="font-label text-label-sm font-medium uppercase tracking-[0.16em]">
+            D01 design system — reduced-motion: transitions and filters disabled
           </p>
         </footer>
       </div>

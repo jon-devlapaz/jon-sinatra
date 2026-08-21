@@ -1,21 +1,29 @@
 ---
 /**
- * I01 — 404 page. Styled to the theme: an off-night poster, a backstage
- * joke, and a ticket-stub CTA home. Every unknown route lands here.
+ * I01 — 404 page. Aurelian Gallery treatment.
+ * Off-stage moment: gallery-label eyebrow, display headline, body copy,
+ * and a primary CTA back to the main stage.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingCTA from '../components/primitives/BookingCTA.astro';
 ---
 
-<BaseLayout title="404 — The wrong door" description="The page you're after isn't in the set list.">
-  <section class="py-24 text-center">
-    <p class="eyebrow">404</p>
-    <h1 class="mt-6 text-display text-ink">The wrong door.</h1>
-    <p class="mx-auto mt-4 max-w-md text-ink-soft">
+<BaseLayout
+  title="404 — The wrong door"
+  description="The page you're after isn't in the set list."
+>
+  <section class="section-gap container-page text-center">
+    <p class="font-label text-subheading-caps text-primary">404</p>
+    <h1 class="mt-6 font-display text-display-lg-mobile md:text-display-lg text-on-surface tracking-tighter">
+      The wrong door.
+    </h1>
+    <div class="w-12 border-t border-primary mx-auto mt-8" />
+    <p class="mx-auto mt-8 max-w-md font-body text-body-md text-on-surface-variant font-light leading-loose">
       The page you're after isn't in the set list. Even the great ones hit a wrong note now and then
       — step back to the main stage.
     </p>
-    <div class="mt-10">
-      <a class="btn" href="/#marquee">Back to the main stage</a>
+    <div class="mt-12 flex justify-center">
+      <BookingCTA href="/" label="Back to the main stage" variant="primary" />
     </div>
   </section>
 </BaseLayout>

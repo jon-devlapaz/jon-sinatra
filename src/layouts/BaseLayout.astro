@@ -1,11 +1,12 @@
 ---
 /**
- * LG1 layout — shared shell.
- * Warm-paper shell: sticky glass header with a fixed brand lockup top-left,
- * a centered glassy card for content, and an anchor nav. Consumed by every
- * page (index, 404, …).
+ * Aurelian Gallery layout — shared shell.
+ * Light luxury: fixed glassmorphism header, pristine white background,
+ * 1440px container with 80px desktop / 24px mobile margins.
+ * Consumed by every page (index, 404, style-guide).
  */
 import '../styles/global.css';
+import Header from '../components/primitives/Header.astro';
 
 interface Props {
   title: string;
@@ -15,21 +16,14 @@ interface Props {
 
 const {
   title,
-  description = 'Jon Delapaz — classic oldies crooner, Sinatra-style.',
+  description = 'Jon Delapaz — lounge singer and performer.',
   image = '/og.jpg',
 } = Astro.props;
 
-// Absolute URLs for canonical/OG so the page is identical on any static host.
 const origin =
   Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://jonsinatra.example');
 const pageUrl = new URL(Astro.url.pathname, origin).href;
 const ogImage = new URL(image, origin).href;
-const navItems = [
-  { id: 'about', label: 'About' },
-  { id: 'music', label: 'Music' },
-  { id: 'booking', label: 'Book' },
-  { id: 'contact', label: 'Contact' },
-];
 ---
 
 <!doctype html>
@@ -38,7 +32,7 @@ const navItems = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f4efe6" />
+    <meta name="theme-color" content="#fcf9f8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={pageUrl} />
 
@@ -56,55 +50,21 @@ const navItems = [
 
     <title>{title}</title>
   </head>
-  <body class="m-0 bg-paper text-ink antialiased" id="top">
+  <body class="m-0 bg-surface text-on-background antialiased" id="top">
     <a
       href="#main"
-      class="fixed top-4 left-4 z-50 -translate-y-20 rounded-md bg-paper-lift px-4 py-2 font-sans text-sm font-medium text-accent-deep opacity-0 shadow-soft focus:translate-y-0 focus:opacity-100"
+      class="fixed top-4 left-4 z-60 -translate-y-20 rounded-none bg-surface-container-low px-4 py-2 font-label text-subheading-caps text-primary opacity-0 focus:translate-y-0 focus:opacity-100 transition-transform transition-opacity duration-300"
       >Skip to content</a
     >
 
-    <header
-      class="sticky top-0 z-40 border-b border-card-border bg-paper/80 backdrop-blur-md"
-      role="banner"
-    >
-      <div class="mx-auto flex max-w-2xl items-center justify-between gap-4 px-5 py-3">
-        <a class="brand" href="#top" aria-label="Jon Delapaz — home">
-          <svg class="h-6 w-6" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-            <rect width="64" height="64" rx="14" fill="#ece3d2"></rect>
-            <circle cx="32" cy="22" r="8" stroke="#6f4510" stroke-width="4"></circle>
-            <path
-              d="M32 30v8M23 40h18v4a9 9 0 0 1-18 0z"
-              stroke="#6f4510"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-            <path d="M27 46h10" stroke="#6f4510" stroke-width="4" stroke-linecap="round"></path>
-          </svg>
-          <span class="brand-name">Jon Delapaz</span>
-        </a>
+    <!-- Glassmorphism Header (fixed, not sticky) -->
+    <Header brandName="Jon Delapaz" />
 
-        <nav aria-label="Site">
-          <ul
-            class="flex flex-wrap justify-end gap-x-5 gap-y-1 font-sans text-sm font-medium text-accent-deep"
-          >
-            {
-              navItems.map((item) => (
-                <li>
-                  <a class="transition-colors duration-200 hover:text-ink" href={`#${item.id}`}>
-                    {item.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main id="main" tabindex="-1" class="mx-auto w-full max-w-2xl px-5 pt-10 pb-4">
-      <div class="card px-6 py-12 sm:px-10">
-        <slot />
-      </div>
+    <main id="main" tabindex="-1" class="pt-[120px]">
+      <slot />
     </main>
+  {/* variate:begin */}
+  {import.meta.env.DEV && <script is:inline src="http://127.0.0.1:4504/v.js" async />}
+  {/* variate:end */}
   </body>
 </html>

@@ -1,0 +1,19 @@
+---
+/**
+ * D01 Primitive — GlassyCard.
+ * Sharp-edged white card on marble background with hairline border.
+ * Replaces GatefoldCard (rounded, gradient, glassy).
+ * Consumed by style guide, future card sections.
+ */
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className = '' } = Astro.props;
+---
+
+<section class={`card-white ${className}`}>
+  {title && <h3 class="font-display text-headline-md font-medium text-on-surface mb-4">{title}</h3>}
+  <slot />
+</section>

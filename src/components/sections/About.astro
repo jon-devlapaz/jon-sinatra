@@ -1,0 +1,48 @@
+---
+/**
+ * F02 — About / Framed Gallery (Aurelian Gallery).
+ * 2-col grid: framed image (left) + concise text (right).
+ * Frame: h-[700px] on desktop, sharp corners, corner accents, gallery-img filter.
+ * Headline: display-lg / display-lg-mobile, tracking-tighter.
+ * Divider: w-12 border-t border-primary.
+ * Body: body-md, font-light, leading-loose, text-on-surface-variant (2 paragraphs).
+ * Link: BookingCTA underline variant with arrow_forward icon.
+ */
+import BookingCTA from '../primitives/BookingCTA.astro';
+
+interface Props {
+  eyebrow?: string;
+  headline: { lead: string; accent: string };
+  body: string[];             // 2 paragraphs
+  link: { label: string; href: string }; // "READ FULL BIOGRAPHY"
+}
+
+const { eyebrow, headline, body, link } = Astro.props;
+---
+
+<section id="about" class="section-gap" aria-labelledby="about-title">
+  <div class="container-page">
+    <div class="about-copy mx-auto flex max-w-3xl flex-col gap-8">
+        {eyebrow && <p class="font-label text-label-sm text-primary">{eyebrow}</p>}
+        <h2 class="about-title font-display text-on-surface" id="about-title">
+          {headline.lead}<br />
+          <span class="text-primary italic">{headline.accent}</span>
+        </h2>
+        <div class="w-12 border-t border-primary" />
+        {body.map((paragraph) => (
+          <p class="font-body text-body-md text-on-surface-variant font-light leading-loose">
+            {paragraph}
+          </p>
+        ))}
+        <div>
+          <BookingCTA
+            href={link.href}
+            label={link.label}
+            variant="underline"
+            ariaLabel={`${link.label} — ${headline.lead} ${headline.accent}`}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

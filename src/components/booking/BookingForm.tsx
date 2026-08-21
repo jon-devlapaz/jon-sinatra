@@ -3,6 +3,9 @@
  * validation, pending/success/error states and endpoint delivery. Without JS
  * the SSR `<form action method=POST>` still submits to the configured endpoint
  * (mailto: by default) — progressive enhancement, never a dead form.
+ *
+ * Aurelian Gallery styling: underline-only inputs, label-sm uppercase,
+ * sharp corners, brushed gold accents.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { validateBooking, type BookingFieldErrors, type BookingValues } from '../../lib/validation';
@@ -42,6 +45,12 @@ function readPrefillParams(): { pkgId: string | null; date: string | null } {
 
 type FormSubmitEvent = Parameters<NonNullable<React.ComponentProps<'form'>['onSubmit']>>[0];
 
+const labelClass =
+  'block font-label text-label-sm font-semibold uppercase text-on-surface-variant mb-2';
+const inputClass =
+  'w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary outline-none py-2 font-body text-body-md text-on-surface transition-colors duration-200 placeholder:text-on-surface-variant placeholder:opacity-50';
+const errorClass = 'font-label text-label-sm font-semibold text-error mt-1';
+
 export default function BookingForm({ mailto, endpoint, packages = [] }: BookingFormProps) {
   const [values, setValues] = useState<BookingValues>(EMPTY);
   const [errors, setErrors] = useState<BookingFieldErrors>({});
@@ -51,14 +60,12 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
 
   const labelFor = useMemo(() => new Map(packages.map((p) => [p.id, p.eyebrow])), [packages]);
 
-  // Initial prefill from the URL (deep links from F04 package cards).
   useEffect(() => {
     const { pkgId, date } = readPrefillParams();
     if (pkgId && labelFor.has(pkgId)) setValues((v) => ({ ...v, package: labelFor.get(pkgId)! }));
     if (date) setValues((v) => ({ ...v, date }));
   }, [labelFor]);
 
-  // Live updates: calendar selection (custom event) and hash/URL changes.
   useEffect(() => {
     const onDateSelected = (event: Event) => {
       const detail = (event as CustomEvent<string>).detail;
@@ -95,7 +102,6 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
       event.preventDefault();
       if (status === 'pending') return;
       if (gotcha) {
-        // Honeypot tripped — pretend success without delivering.
         setStatus('ok');
         return;
       }
@@ -136,22 +142,27 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
   return (
     <div className="booking-form">
       {status === 'ok' ? (
-        <div role="status" className="card mt-10 grid gap-4 p-8 text-center" aria-live="polite">
-          <p className="eyebrow" id="booking-ok-eyebrow">
+        <div
+          role="status"
+          className="card-white mt-10 grid gap-4 p-8 text-center"
+          aria-live="polite"
+        >
+          <p className="font-label text-subheading-caps text-primary" id="booking-ok-eyebrow">
             Received
           </p>
-          <h3 className="text-display text-ink">The date is pencilled in.</h3>
-          <p className="mx-auto max-w-md text-ink-soft">
-            Thank you — I'll confirm availability within 24 hours. If you'd like to chat sooner,
-            write to{' '}
-            <a className="text-accent-deep underline underline-offset-4" href={`mailto:${mailto}`}>
+          <h3 className="font-display text-headline-md font-medium text-on-surface">
+            Thanks, I received your note.
+          </h3>
+          <p className="mx-auto max-w-md font-body text-body-md text-on-surface-variant font-light leading-loose">
+            Thank you — I’ll check the details and get back to you as soon as I can. If you’d like to chat sooner, write to{' '}
+            <a className="text-primary underline underline-offset-4" href={`mailto:${mailto}`}>
               {mailto}
             </a>
             .
           </p>
           <div>
-            <button type="button" className="btn btn--ghost mt-4" onClick={reset}>
-              Make another enquiry
+            <button type="button" className="btn-ghost mt-4" onClick={reset}>
+              Send another note
             </button>
           </div>
         </div>
@@ -164,7 +175,6 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
           onSubmit={handleSubmit}
           noValidate
         >
-          {/* Honeypot trap (hidden from humans). */}
           <div className="hidden" aria-hidden="true">
             <label>
               Leave this empty:{' '}
@@ -185,12 +195,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
           {values.package && <input type="hidden" name="package" value={values.package} />}
 
           <div className="grid gap-1">
-            <label
-              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
-              htmlFor="name"
-            >
-              Name
-            </label>
+            <label className={labelClass} htmlFor="name">Name</label>
             <input
               id="name"
               name="name"
@@ -200,22 +205,13 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('name', e.target.value)}
               aria-invalid={errors.name ? true : undefined}
               aria-describedby={errors.name ? 'name-error' : undefined}
-              className="input"
+              className={inputClass}
             />
-            {errors.name && (
-              <p id="name-error" className="font-sans text-label font-semibold text-accent-deep">
-                {errors.name}
-              </p>
-            )}
+            {errors.name && <p id="name-error" className={errorClass}>{errors.name}</p>}
           </div>
 
           <div className="grid gap-1">
-            <label
-              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
-              htmlFor="email"
-            >
-              Email
-            </label>
+            <label className={labelClass} htmlFor="email">Email</label>
             <input
               id="email"
               name="email"
@@ -225,22 +221,13 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('email', e.target.value)}
               aria-invalid={errors.email ? true : undefined}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              className="input"
+              className={inputClass}
             />
-            {errors.email && (
-              <p id="email-error" className="font-sans text-label font-semibold text-accent-deep">
-                {errors.email}
-              </p>
-            )}
+            {errors.email && <p id="email-error" className={errorClass}>{errors.email}</p>}
           </div>
 
           <div className="grid gap-1">
-            <label
-              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
-              htmlFor="date"
-            >
-              Event date
-            </label>
+            <label className={labelClass} htmlFor="date">Event date</label>
             <input
               id="date"
               name="date"
@@ -250,39 +237,25 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('date', e.target.value)}
               aria-invalid={errors.date ? true : undefined}
               aria-describedby={errors.date ? 'date-error' : undefined}
-              className="input"
+              className={inputClass}
             />
-            {errors.date && (
-              <p id="date-error" className="font-sans text-label font-semibold text-accent-deep">
-                {errors.date}
-              </p>
-            )}
+            {errors.date && <p id="date-error" className={errorClass}>{errors.date}</p>}
           </div>
 
           <div className="grid gap-1">
-            <label
-              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
-              htmlFor="package"
-            >
-              Package
-            </label>
+            <label className={labelClass} htmlFor="package">Package</label>
             <input
               id="package"
               name="package"
               type="text"
               readOnly
               value={values.package}
-              className="input text-ink-soft"
+              className={inputClass + ' text-on-surface-variant'}
             />
           </div>
 
           <div className="grid gap-1">
-            <label
-              className="font-sans text-label font-semibold uppercase tracking-[0.12em] text-accent-deep"
-              htmlFor="message"
-            >
-              Message
-            </label>
+            <label className={labelClass} htmlFor="message">Message</label>
             <textarea
               id="message"
               name="message"
@@ -292,21 +265,13 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
               onChange={(e) => setField('message', e.target.value)}
               aria-invalid={errors.message ? true : undefined}
               aria-describedby={errors.message ? 'message-error' : undefined}
-              className="input"
+              className={inputClass}
             ></textarea>
-            {errors.message && (
-              <p id="message-error" className="font-sans text-label font-semibold text-accent-deep">
-                {errors.message}
-              </p>
-            )}
+            {errors.message && <p id="message-error" className={errorClass}>{errors.message}</p>}
           </div>
 
           {status === 'error' && (
-            <p
-              role="alert"
-              className="font-sans text-label font-semibold text-accent-deep"
-              aria-live="assertive"
-            >
+            <p role="alert" className={errorClass} aria-live="assertive">
               {errorMessage}
             </p>
           )}
@@ -314,28 +279,22 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
           <div className="grid gap-3 pt-2">
             <button
               type="submit"
-              className={[
-                'btn w-full justify-center',
-                status === 'pending' ? 'btn--processing' : '',
-              ].join(' ')}
+              className="btn-primary w-full justify-center"
               disabled={status === 'pending'}
               aria-busy={status === 'pending'}
             >
-              {status === 'pending' ? 'Sending…' : 'Send the booking'}
+              {status === 'pending' ? 'Sending…' : 'Send my note'}
             </button>
-            <p className="text-center font-sans text-sm text-ink-soft">
-              Prefer to write?{' '}
-              <a
-                className="text-accent-deep underline underline-offset-4"
-                href={`mailto:${mailto}`}
-              >
+            <p className="text-center font-label text-sm text-on-surface-variant">
+              Prefer email?{' '}
+              <a className="text-primary underline underline-offset-4" href={`mailto:${mailto}`}>
                 Email {mailto}
               </a>
             </p>
           </div>
 
-          <p className="font-sans text-sm text-ink-soft">
-            Your details are used only to reply to this enquiry — no lists, no spam, ever.
+          <p className="font-label text-sm text-on-surface-variant">
+            I’ll use your details only to reply about your event.
           </p>
         </form>
       )}

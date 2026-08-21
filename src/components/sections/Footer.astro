@@ -1,83 +1,41 @@
 ---
 /**
- * F09 — Contact (footer).
- * Contact recap, quick-nav to the four page sections, a final booking nudge
- * CTA, and a credit line. No CTA confusion with the F08 booking form — this
- * is a scroll-to-contact prompt.
+ * F04 — Footer (Aurelian Gallery).
+ * Border-t outline-variant/20, bg-background, py-section-gap.
+ * Brand lockup: display-lg / display-lg-mobile, text-primary, tracking-widest.
+ * Links: label-sm, text-on-surface-variant, hover:text-primary.
+ * Copyright: label-sm, text-on-surface-variant, center mobile / right desktop.
  */
-import type { Profile } from '../../data/profile';
-import { getYear } from 'date-fns';
-
 interface Props {
-  profile: Profile;
+  brandName: string;
+  links: { label: string; href: string }[];
 }
-const { profile } = Astro.props;
 
-const scrollNav = [
-  { id: 'about', label: 'About' },
-  { id: 'music', label: 'Music' },
-  { id: 'booking', label: 'Book' },
-  { id: 'contact', label: 'Contact' },
-];
+const { brandName, links } = Astro.props;
 ---
 
-<section id="contact" class="py-16" aria-labelledby="contact-title">
-  <footer>
-    <div class="mx-auto grid max-w-2xl gap-8 md:grid-cols-3">
-      <!-- Contact recap -->
-      <div>
-        <p class="eyebrow" id="contact-title">Say hello</p>
-        <p class="mt-3">
-          <a class="text-ink" href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
-        </p>
-        <p class="mt-1">
-          <a class="text-ink" href={`tel:${profile.contact.phone.replace(/\s+/g, '')}`}
-            >{profile.contact.phone}</a
-          >
-        </p>
-      </div>
-
-      <!-- Quick nav -->
-      <nav aria-label="Footer">
-        <p class="font-sans text-label uppercase tracking-[0.2em] text-accent-deep">Set list</p>
-        <ul class="mt-3 grid gap-2 font-sans text-label text-accent-deep">
-          {
-            scrollNav.map((s) => (
-              <li>
-                <a class="transition-colors duration-150 hover:text-ink" href={`#${s.id}`}>
-                  {s.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <!-- Booking nudge + socials -->
-      <div class="flex flex-col items-start gap-4">
-        <a class="btn" href="#booking?package=standard">Book the night</a>
-        <div class="flex gap-2 font-sans text-label text-accent-deep">
-          {
-            profile.socials.map((s) => (
-              <a
-                class="text-accent hover:text-ink"
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {s.label}
-              </a>
-            ))
-          }
-        </div>
-      </div>
+<footer class="w-full bg-background border-t border-outline-variant/20 py-[80px] md:py-section-gap" role="contentinfo">
+  <div class="footer-grid container-page flex-col md:flex-row items-center justify-between gap-8">
+    <!-- Brand Lockup -->
+    <div class="footer-brand max-w-full font-display text-brand-footer-mobile md:text-brand-footer leading-brand-footer-mobile md:leading-brand-footer text-primary tracking-brand text-center md:text-left whitespace-nowrap">
+      {brandName}
     </div>
 
-    <div
-      class="mt-12 pt-6 text-center text-ink-soft font-sans text-label uppercase tracking-[0.18em]"
-    >
-      © {getYear(new Date())}
-      {profile.name} · Est. {getYear(new Date())}
+    <!-- Links -->
+    <nav aria-label="Footer" class="flex flex-wrap justify-center gap-6 font-label text-label-sm">
+      {links.map((link) => (
+        <a
+          class="text-on-surface-variant hover:text-primary transition-colors duration-300"
+          href={link.href}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Copyright -->
+    <div class="font-label text-label-sm text-on-surface-variant text-center md:text-right w-full md:w-auto">
+      © {new Date().getFullYear()} {brandName}. ALL RIGHTS RESERVED.
     </div>
-  </footer>
-</section>
+  </div>
+</footer>

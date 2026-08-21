@@ -1,15 +1,8 @@
 /**
- * LG2 — profile content model (static, zero-JS).
- * The single source of truth consumed by F01–F09 sections.
- * Portrait/gallery assets are not provided in this scaffold: each media surface
- * renders a themed placeholder frame (media-frame) so the profile is shippable
- * and zero-dependency until real assets are dropped in.
+ * Aurelian Gallery — profile content model (static, zero-JS).
+ * Single source of truth consumed by Hero, About, BookingBar, Footer.
+ * Images use placeholder URLs until real assets are provided.
  */
-
-export interface Fact {
-  dt: string;
-  dd: string;
-}
 
 export interface Package {
   id: string;
@@ -18,93 +11,101 @@ export interface Package {
   blurb: string;
   stubValue: string;
   status: string;
-  /** Anchors the package CTA into the booking form. */
   ctaHref: string;
-}
-
-export interface GalleryItem {
-  alt: string;
-  /** Placeholder label rendered in the media-frame until a real img src lands. */
-  label: string;
-}
-
-export interface Social {
-  label: string;
-  href: string;
 }
 
 export interface Profile {
   name: string;
-  tagline: string;
-  marqueeSubtitle: string;
-  /** Short third-person bio (F02). */
-  bio: string;
-  /** Pull quote — the site's voice, not a client testimonial (F02). */
-  quote: string;
-  portraitAlt: string;
-  portraitLabel: string;
-  facts: Fact[];
-  packages: Package[];
-  /** Evening gallery placeholders (F05). */
-  gallery: GalleryItem[];
-  /** ISO dates already booked — struck through on the F07 calendar (LG3). */
-  blockedDates: string[];
+  // Hero
+  heroSubtitle: string;
+  heroBody: string;
+  heroImage: { src: string; alt: string };
+  // Booking Bar (static shell; React island handles form)
+  bookingBarEnabled: boolean;
+  // About / Framed Gallery
+  aboutEyebrow: string;
+  aboutHeadline: { lead: string; accent: string };
+  aboutBody: string[];
+  aboutLink: { label: string; href: string };
+  // Footer
+  footerLinks: { label: string; href: string }[];
+  // Contact
   contact: { email: string; phone: string };
-  socials: Social[];
+  // Socials (kept for potential future use)
+  socials: { label: string; href: string }[];
+  // Packages (for BookingForm island)
+  packages: Package[];
 }
 
 export const profile: Profile = {
   name: 'Jon Delapaz',
-  tagline: 'Classic oldies crooner — Sinatra-style',
-  marqueeSubtitle: 'Now appearing — weddings, bar mitzvahs & late-night bars',
-  bio: 'Jon Delapaz sings the classic oldies — the songs of Sinatra, Martin, Bennett, and the songbook that made them timeless. From a quiet first-dance ballad to a swing number the whole room knows by heart, his voice suits weddings, bar mitzvahs, engagement parties, and long nights in bars and clubs. Available solo for the evening, or with a band hired to fit the room.',
-  quote: "The classic songs aren't old — they're waiting for the right room.",
-  portraitAlt: 'Jon Delapaz — classic oldies crooner',
-  portraitLabel: 'Portrait — Jon Delapaz',
-  facts: [
-    { dt: 'Range', dd: 'Baritone' },
-    { dt: 'Venue', dd: 'Weddings, bar mitzvahs, bars & clubs' },
-    { dt: 'Bookings', dd: 'Open — tell me your date' },
+
+  // Hero
+  heroSubtitle: 'Songs with a little swing',
+  heroBody:
+    'I sing the standards that make a room feel warmer: Sinatra, Dean Martin, and the great American songbook. For weddings, dinners, galas, and private evenings, I shape the set around the moment you want to create.',
+  heroImage: {
+    src: '/singshot.jpg',
+    alt: 'Jon Delapaz — classic crooner in a minimalist art gallery, high-key lighting, brushed gold accents',
+  },
+
+  // Booking Bar
+  bookingBarEnabled: true,
+
+  // About / Framed Gallery
+  aboutEyebrow: 'A little about me',
+  aboutHeadline: {
+    lead: 'I love singing for',
+    accent: 'a room',
+  },
+  aboutBody: [
+    'I have sung in bands and spent time working with jazz arrangements, but what I enjoy most is the connection between a singer, a song, and the people listening. The right performance should give a room a feeling without taking it over.',
+    'My repertoire draws from Sinatra, Dean Martin, and other classic crooners: familiar songs, thoughtful arrangements, and enough flexibility to move from cocktails to dinner to a final number everyone knows.',
   ],
+  aboutLink: { label: 'INQUIRE ABOUT YOUR DATE', href: '#booking-form-shell' },
+
+  // Footer
+  footerLinks: [
+    { label: 'PRIVACY', href: '#privacy' },
+    { label: 'TERMS', href: '#terms' },
+    { label: 'PRESS', href: '#press' },
+    { label: 'CONTACT', href: `mailto:jonathan10620@gmail.com` },
+  ],
+
+  // Contact
+  contact: { email: 'jonathan10620@gmail.com', phone: '+1 (830) 237-3964' },
+
+  // Socials
+  socials: [],
+
+  // Packages (for BookingForm island)
   packages: [
     {
       id: 'cocktail',
       eyebrow: 'Cocktail Hour',
-      title: 'Intimate lounge set',
-      blurb:
-        'A 45-minute set of classic oldies and standards — perfect for arrivals, cocktails, or a quiet corner table.',
-      stubValue: 'Enquire',
+      title: 'Cocktail hour set',
+      blurb: 'A relaxed set of standards for arrivals, cocktails, dinner, or a smaller gathering.',
+      stubValue: '$1,200',
       status: 'On request',
       ctaHref: '#booking?package=cocktail',
     },
     {
       id: 'standard',
-      eyebrow: 'The Standard',
-      title: 'The full evening',
-      blurb:
-        'Two sets with an interval — first-dance ballads, swing numbers, and everything in between. The signature evening.',
-      stubValue: 'Enquire',
-      status: 'Most requested',
+      eyebrow: 'A full evening',
+      title: 'Two hours of classics',
+      blurb: 'A flexible evening of swing, ballads, and familiar favorites, shaped around your schedule.',
+      stubValue: '$3,200',
+      status: 'Let’s talk through it',
       ctaHref: '#booking?package=standard',
     },
     {
       id: 'gala',
-      eyebrow: 'Gala',
-      title: 'Ceremony & celebration',
-      blurb:
-        'A tailored programme for weddings and bar mitzvahs — the ceremony song, the first dance, and a reception set the room will sing along to.',
-      stubValue: 'Enquire',
+      eyebrow: 'A bigger celebration',
+      title: 'A larger band setup',
+      blurb: 'For larger rooms and bigger celebrations, we can talk through the right musicians and arrangements.',
+      stubValue: '$ — on request',
       status: 'On request',
       ctaHref: '#booking?package=gala',
     },
   ],
-  gallery: [
-    { alt: 'Audio sample — coming soon', label: 'Audio' },
-    { alt: 'Video sample — coming soon', label: 'Video' },
-    { alt: 'Stage photos — coming soon', label: 'Photos' },
-    { alt: 'Live set — coming soon', label: 'Live' },
-  ],
-  blockedDates: [],
-  contact: { email: 'jonathan10620@gmail.com', phone: '+1 (830) 237-3964' },
-  socials: [],
 };

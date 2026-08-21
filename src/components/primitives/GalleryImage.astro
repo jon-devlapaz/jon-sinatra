@@ -1,0 +1,33 @@
+---
+/**
+ * D01 Primitive — GalleryImage.
+ * Image with desaturated filter (grayscale 15% sepia 5%) that transitions
+ * to full color on hover. Sharp corners, no frame.
+ * Consumed by Gallery grids, hero image alternative.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  aspectRatio?: '4/3' | '16/9' | '1/1' | '3/4';
+  class?: string;
+}
+
+const { src, alt, aspectRatio = '4/3', class: className = '' } = Astro.props;
+
+const aspectClass = {
+  '4/3': 'aspect-[4/3]',
+  '16/9': 'aspect-video',
+  '1/1': 'aspect-square',
+  '3/4': 'aspect-[3/4]',
+}[aspectRatio];
+
+---
+
+<div class={`relative overflow-hidden ${aspectClass} ${className}`}>
+  <img
+    class="gallery-img relative z-10 object-cover w-full h-full"
+    src={src}
+    alt={alt}
+    loading="lazy"
+  />
+</div>
