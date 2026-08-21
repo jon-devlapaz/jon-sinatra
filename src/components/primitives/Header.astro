@@ -74,6 +74,9 @@ const {
     role="dialog"
     aria-modal="true"
     aria-label="Navigation"
+    aria-hidden="true"
+    inert
+    tabindex="-1"
     data-drawer
   >
     <nav class="flex flex-col items-center gap-6 text-center">
@@ -111,21 +114,34 @@ const {
     const drawer = document.querySelector('[data-drawer]');
     const links = document.querySelectorAll('[data-drawer-link]');
     const closeBtn = document.querySelector('[data-drawer-close]');
+    const pageContent = document.querySelector('[data-page-content]');
+    let previouslyFocused = null;
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     if (!toggle || !drawer) return;
 
     const open = () => {
+      previouslyFocused = document.activeElement;
       drawer.classList.remove('opacity-0', 'pointer-events-none');
       drawer.classList.add('opacity-100');
+      drawer.removeAttribute('inert');
+      drawer.setAttribute('aria-hidden', 'false');
+      pageContent?.setAttribute('inert', '');
       document.body.style.overflow = 'hidden';
       toggle.setAttribute('aria-expanded', 'true');
+      (closeBtn as HTMLElement | null)?.focus();
     };
 
     const close = () => {
       drawer.classList.remove('opacity-100');
       drawer.classList.add('opacity-0', 'pointer-events-none');
+      drawer.setAttribute('inert', '');
+      drawer.setAttribute('aria-hidden', 'true');
+      pageContent?.removeAttribute('inert');
       document.body.style.overflow = '';
       toggle.setAttribute('aria-expanded', 'false');
+      (previouslyFocused as HTMLElement | null)?.focus();
     };
 
     toggle.addEventListener('click', open);
@@ -134,7 +150,22 @@ const {
 
     // Close on escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape' && drawer.getAttribute('aria-hidden') === 'false') {
+        close();
+        return;
+      }
+      if (e.key !== 'Tab' || drawer.getAttribute('aria-hidden') !== 'false') return;
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>(focusableSelector));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
 
     // Close on backdrop click

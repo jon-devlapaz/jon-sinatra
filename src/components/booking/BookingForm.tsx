@@ -9,7 +9,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { validateBooking, type BookingFieldErrors, type BookingValues } from '../../lib/validation';
-import { submitBooking } from '../../lib/booking';
+import { submitBooking, type GoogleFormConfig } from '../../lib/booking';
 
 export interface BookingPackage {
   id: string;
@@ -21,6 +21,7 @@ export interface BookingFormProps {
   mailto: string;
   /** Configurable static-host form endpoint (empty → mailto handoff). */
   endpoint?: string;
+  googleForm?: GoogleFormConfig;
   /** Package tiers so `?package=<id>` can resolve to a display label. */
   packages?: BookingPackage[];
 }
@@ -51,7 +52,7 @@ const inputClass =
   'w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary outline-none py-2 font-body text-body-md text-on-surface transition-colors duration-200 placeholder:text-on-surface-variant placeholder:opacity-50';
 const errorClass = 'font-label text-label-sm font-semibold text-error mt-1';
 
-export default function BookingForm({ mailto, endpoint, packages = [] }: BookingFormProps) {
+export default function BookingForm({ mailto, endpoint, googleForm, packages = [] }: BookingFormProps) {
   const [values, setValues] = useState<BookingValues>(EMPTY);
   const [errors, setErrors] = useState<BookingFieldErrors>({});
   const [status, setStatus] = useState<Status>('idle');
@@ -115,7 +116,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
       setStatus('pending');
       setErrorMessage('');
       try {
-        const result = await submitBooking(values, { endpoint, mailto });
+        const result = await submitBooking(values, { endpoint, googleForm, mailto });
         if (result.status === 'handoff') {
           window.location.assign(result.url);
           setStatus('ok');
@@ -127,7 +128,7 @@ export default function BookingForm({ mailto, endpoint, packages = [] }: Booking
         setErrorMessage("That didn't go through — mind trying again?");
       }
     },
-    [status, gotcha, values, endpoint, mailto],
+    [status, gotcha, values, endpoint, googleForm, mailto],
   );
 
   const reset = () => {
