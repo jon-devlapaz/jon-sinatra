@@ -462,6 +462,10 @@
     padding-block: clamp(96px, 12vw, var(--spacing-section-gap));
   }
 
+  .hero-section {
+    padding-block-start: clamp(48px, 6vw, 88px);
+  }
+
   /* --- Utility: grid for hero --- */
   .hero-grid {
     display: grid;
