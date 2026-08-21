@@ -15,7 +15,9 @@ interface Props {
 }
 
 const { profile } = Astro.props;
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
+const endpoint =
+  (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined) ||
+  'https://formspree.io/f/mgawdnpp';
 const packages = profile.packages?.map((p) => ({ id: p.id, eyebrow: p.eyebrow })) || [];
 ---
 
