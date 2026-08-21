@@ -6,7 +6,6 @@
  * This shell provides the detailed form experience (validation, states, endpoint delivery).
  */
 import type { Profile } from '../../data/profile';
-import type { GoogleFormConfig } from '../../lib/booking';
 import BookingForm from '../booking/BookingForm';
 
 interface Props {
@@ -17,17 +16,6 @@ interface Props {
 
 const { profile } = Astro.props;
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
-const googleFormAction = import.meta.env.PUBLIC_GOOGLE_FORM_ACTION as string | undefined;
-const googleFormFields = {
-  name: import.meta.env.PUBLIC_GOOGLE_FORM_NAME_FIELD as string | undefined,
-  email: import.meta.env.PUBLIC_GOOGLE_FORM_EMAIL_FIELD as string | undefined,
-  date: import.meta.env.PUBLIC_GOOGLE_FORM_DATE_FIELD as string | undefined,
-  package: import.meta.env.PUBLIC_GOOGLE_FORM_PACKAGE_FIELD as string | undefined,
-  message: import.meta.env.PUBLIC_GOOGLE_FORM_MESSAGE_FIELD as string | undefined,
-};
-const googleForm = googleFormAction && Object.values(googleFormFields).every(Boolean)
-  ? ({ action: googleFormAction, fields: googleFormFields as GoogleFormConfig['fields'] } satisfies GoogleFormConfig)
-  : undefined;
 const packages = profile.packages?.map((p) => ({ id: p.id, eyebrow: p.eyebrow })) || [];
 ---
 
@@ -45,7 +33,6 @@ const packages = profile.packages?.map((p) => ({ id: p.id, eyebrow: p.eyebrow })
       client:load
       mailto={profile.contact.email}
       endpoint={endpoint}
-      googleForm={googleForm}
       packages={packages}
     />
   </div>

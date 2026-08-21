@@ -41,33 +41,6 @@ describe('submitBooking', () => {
     });
   });
 
-  it('POSTs mapped fields to Google Forms', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({ type: 'opaque' });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await submitBooking(valid, {
-      ...options,
-      googleForm: {
-        action: 'https://docs.google.com/forms/d/e/form-id/viewform',
-        fields: {
-          name: '111',
-          email: '222',
-          date: '333',
-          package: '444',
-          message: '555',
-        },
-      },
-    });
-
-    expect(result).toEqual({ status: 'ok' });
-    const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toBe('https://docs.google.com/forms/d/e/form-id/formResponse');
-    expect(init.mode).toBe('no-cors');
-    expect(String(init.body)).toContain('entry.111=Avery+Booker');
-    expect(String(init.body)).toContain('entry.222=avery%40example.com');
-    expect(String(init.body)).toContain('entry.333=2026-12-20');
-  });
-
   it('throws when the endpoint responds with an error', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }));
     await expect(
